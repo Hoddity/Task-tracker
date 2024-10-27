@@ -1,0 +1,160 @@
+
+*{
+    font-family: Days;
+    margin:0;
+    padding: 0;
+    font-size: 24px;
+}
+
+@font-face {
+  font-family: "Days";
+  src: url(./font/Days.otf);
+  font-weight: 400;
+  font-size: 24px;
+  }
+
+:root {
+  font-family: "Days";
+  font-weight: 400;
+  font-size: 24px;
+  color: #000000;
+}
+
+#alert {
+    display: none;
+    color: red;
+    margin-bottom: 10px;
+  }
+
+/*Вход */
+.form-control{
+    background-color: #D9D9D9;
+    height: 50px;
+    width: 410px;
+    text-align:left;
+    border-radius: 10px;
+    margin: auto;
+    font-size: 24px;
+}
+
+.form-control:hover{
+    background-color: #d9d9d9e1;
+}
+.card{
+    border-radius: 30px;
+    width: 500px;
+    background-color: #221C21;
+    display: block;
+    margin: auto;
+    margin-top: 70px;
+}
+
+
+.card-body{
+    display: table;
+    margin: auto;
+}
+.btn-reg{
+    background-color: #BCE36A;
+    width: 410px;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+    border: none;
+    height: 40px; 
+    margin-top: 30px;
+    margin-bottom: 35px;
+}
+.btn-log{
+    background-color: #BCE36A;
+    width: 410px;
+    border-radius: 10px;
+    display: block;
+    margin: auto;
+    border: none;
+    height: 40px;
+    margin-bottom: 35px;
+    margin-top: 30px;
+}
+
+.btn-link{
+    text-decoration: none;
+    height: 30px;
+}
+.btn-link:hover{
+    color: #221C21;
+    text-decoration: none;
+}
+.btn-log:hover{
+    background-color: #bde36ae1;
+}
+
+.login-text{
+    color:#C17BE2;
+    text-align: center;
+    margin-bottom: 20px; 
+    font-size: 24px;
+    font-weight: 400;
+}
+
+.reg-text{
+    color: #BCE36A;
+    text-align: center;
+    margin-bottom: 20px; 
+    font-size: 24px;
+}
+
+.btn-primary-log{
+    background-color: #C17BE2;
+    border: none;
+    width: 165px;
+    height: 40px;
+    display: block;
+    margin: auto;
+    margin-bottom: 30px;
+    color: #221C21;
+    border-radius: 10px;
+}
+.btn-primary-log:hover{
+    background-color: #c17be2ec;
+    color: #221C21;
+}
+.invalid-feedback{
+    margin-top: 2px;
+}
+.btn-primary-reg{
+    width: 410px;
+    background-color: #C17BE2;
+    height: 40px;
+    font-size: 24px;
+    margin-bottom: 30px;
+    border-radius: 10px;
+    display: block;
+}
+.btn-primary-reg:hover{
+    background-color: #bde36ae1;
+}
+.logInput{
+    margin-bottom:35px;
+    height: 50px;
+}
+
+
+.invalid-feedback{
+    font-size: 15px;
+    color: #ff0000af;
+}
+
+
+.inputs{
+    display: table;
+    margin: auto;
+}
+
+.alert{
+    display: block;
+    margin: auto;
+    width: 500px;
+    color: rgba(219, 76, 76, 0.903);
+
+}
