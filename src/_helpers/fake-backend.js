@@ -51,7 +51,7 @@ function fakeBackend() {
                 const user = body();
 
                 if (users.find(x => x.username === user.username)) {
-                    return error('username "' + user.username + '" is already taken')
+                    return error('Логин"' + user.username + '" занят,попробуйте другой вариант')
                 }
 
                 user.id = users.length ? Math.max(...users.map(x => x.id)) + 1 : 1;
@@ -85,7 +85,7 @@ function fakeBackend() {
 
                 // if username changed check if taken
                 if (params.username !== user.username && users.find(x => x.username === params.username)) {
-                    return error('username "' + params.username + '" is already taken')
+                    return error('Логин "' + params.username + '" занят, попробуйте другой вариант')
                 }
 
                 // update and save user
