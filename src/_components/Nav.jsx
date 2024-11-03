@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-
+import { Start } from 'start';
 import { authActions } from '_store';
 
 export { Nav };
@@ -14,8 +14,9 @@ function Nav() {
     if (!auth) return null;
     
     return (
-        <nav className="navbar navbar-expand navbar-dark bg-dark px-3">
+        <nav className="navbar navbar-expand navbar-dark ">
             <div className="navbar-nav">
+                <NavLink to="./start" element={<Start />}>Стартовая страница </NavLink>
                 <NavLink to="/" className="nav-item nav-link">Домой</NavLink>
                 <NavLink to="/users" className="nav-item nav-link">Пользователи</NavLink>
                 <button onClick={logout} className="btn btn-link nav-item nav-link">Выход</button>

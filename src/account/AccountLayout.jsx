@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { Login, Register } from './';
-
+import { Start } from 'start';
 export { AccountLayout };
 
 function AccountLayout() {
