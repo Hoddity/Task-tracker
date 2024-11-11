@@ -10,13 +10,13 @@ function AccountLayout() {
 
     // redirect to home if already logged in
     if (auth) {
-        return <Navigate to="/" />;
+        return <Navigate to="/tasks" />;
     }
 
     return (
         <div className="container">
             <div className="row">
-                <div className="col-sm-8 offset-sm-2 mt-5">
+                <div>
                     <Routes>
                         <Route path="login" element={<Login />} />
                         <Route path="register" element={<Register />} />

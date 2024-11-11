@@ -1,52 +1,54 @@
-
-*{
+* {
     font-family: Days;
-    margin:0;
+    margin: 0;
     padding: 0;
     font-size: 24px;
 }
 
 
 @font-face {
-  font-family: "Days";
-  src: url(./font/Days.otf);
-  font-weight: 400;
-  font-size: 24px;
-  }
+    font-family: "Days";
+    src: url(./font/Days.otf);
+    font-weight: 400;
+    font-size: 24px;
+}
+
 @font-face {
     font-family: Ambidexter;
     src: url(./font/ambidexter.otf);
     font-size: 128px;
     font-weight: 400;
 }
+
 :root {
-  font-family: "Days";
-  font-weight: 400;
-  font-size: 24px;
-  color: #000000;
+    font-family: "Days";
+    font-weight: 400;
+    font-size: 24px;
+    color: #000000;
 }
 
 #alert {
     display: none;
     color: red;
     margin-bottom: 10px;
-  }
+}
 
 /*Вход */
-.form-control{
+.form-control {
     background-color: #D9D9D9;
     height: 50px;
     width: 410px;
-    text-align:left;
+    text-align: left;
     border-radius: 10px;
     margin: auto;
     font-size: 24px;
 }
 
-.form-control:hover{
+.form-control:hover {
     background-color: #d9d9d9e1;
 }
-.card{
+
+.card {
     border-radius: 30px;
     width: 500px;
     background-color: #221C21;
@@ -56,22 +58,24 @@
 }
 
 
-.card-body{
+.card-body {
     display: table;
     margin: auto;
 }
-.btn-reg{
+
+.btn-reg {
     background-color: #BCE36A;
     width: 410px;
     border-radius: 10px;
     display: block;
     margin: auto;
     border: none;
-    height: 40px; 
+    height: 40px;
     margin-top: 30px;
     margin-bottom: 35px;
 }
-.btn-log{
+
+.btn-log {
     background-color: #BCE36A;
     width: 410px;
     border-radius: 10px;
@@ -83,34 +87,36 @@
     margin-top: 30px;
 }
 
-.btn-link{
+.btn-link {
     text-decoration: none;
     height: 30px;
 }
-.btn-link:hover{
+
+.btn-link:hover {
     color: #221C21;
     text-decoration: none;
 }
-.btn-log:hover{
+
+.btn-log:hover {
     background-color: #bde36ae1;
 }
 
-.login-text{
-    color:#C17BE2;
+.login-text {
+    color: #C17BE2;
     text-align: center;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
     font-size: 24px;
     font-weight: 400;
 }
 
-.reg-text{
+.reg-text {
     color: #BCE36A;
     text-align: center;
-    margin-bottom: 20px; 
+    margin-bottom: 20px;
     font-size: 24px;
 }
 
-.btn-primary-log{
+.btn-primary-log {
     background: linear-gradient(to right, #C17BE2, #BCE36A);
     border: none;
     width: 165px;
@@ -121,14 +127,17 @@
     color: #221C21;
     border-radius: 10px;
 }
-.btn-primary-log:hover{
+
+.btn-primary-log:hover {
     background: linear-gradient(to right, #C17BE2, #BCE36A);
     color: #221C21;
 }
-.invalid-feedback{
+
+.invalid-feedback {
     margin-top: 2px;
 }
-.btn-primary-reg{
+
+.btn-primary-reg {
     width: 410px;
     background: linear-gradient(to right, #C17BE2, #BCE36A);
     height: 40px;
@@ -137,27 +146,29 @@
     border-radius: 10px;
     display: block;
 }
-.btn-primary-reg:hover{
+
+.btn-primary-reg:hover {
     background: linear-gradient(to right, #C17BE2, #BCE36A);
 }
-.logInput{
-    margin-bottom:35px;
+
+.logInput {
+    margin-bottom: 35px;
     height: 50px;
 }
 
 
-.invalid-feedback{
+.invalid-feedback {
     font-size: 15px;
     color: #ff0000af;
 }
 
 
-.inputs{
+.inputs {
     display: table;
     margin: auto;
 }
 
-.alert{
+.alert {
     display: block;
     margin: auto;
     width: 500px;
@@ -166,67 +177,69 @@
 }
 
 /*Стартовая страница*/
-.start-page{
+.start-page {}
 
-}
-
-.start-div{
-    display:contents;
+.start-div {
+    display: contents;
     justify-content: center;
 
 }
 
-.start-name{
+.start-name {
     font-family: Ambidexter;
     font-size: 128px;
     font-weight: 400;
 }
 
-.start-text{
-    
-}
+.start-text {}
 
-.start-button{}
+.start-button {}
 
 
 
 
 /**/
-.start-page{
+.start-page {
     margin: 0;
-   padding: 0;
-   background-color: #E7E7E7;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   height: 100vh;
-   position: relative; /* Добавляем position: relative для родительского элемента */
-  }
-  
-  .container {
+    padding: 0;
+    background-color: #E7E7E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+    /* Добавляем position: relative для родительского элемента */
+}
+
+.container {
     text-align: center;
-    position: relative; /* Для позиционирования кругов */
-   }
-   
-  .start-title {
+    position: relative;
+    /* Для позиционирования кругов */
+}
+
+.start-title {
     font-family: Ambidexter;
     font-size: 128px;
     font-weight: 400;
     line-height: 100px;
     margin-bottom: 15px;
-    position: relative; /* Добавляем position: relative для заголовка */
-    z-index: 1; /* Устанавливаем z-index для заголовка */
-   }
-   
-   .start-description {
+    position: relative;
+    /* Добавляем position: relative для заголовка */
+    z-index: 1;
+    /* Устанавливаем z-index для заголовка */
+}
+
+.start-description {
     font-size: 20px;
     text-align: center;
     margin-bottom: 15px;
-    position: relative; /* Добавляем position: relative для описания */
-    z-index: 1; /* Устанавливаем z-index для описания */
-   }
-   
-   .start-button {
+    position: relative;
+    /* Добавляем position: relative для описания */
+    z-index: 1;
+    /* Устанавливаем z-index для описания */
+}
+
+.start-button {
     background: linear-gradient(to left, #C17BE2, #BCE36A);
     color: white;
     border: none;
@@ -236,68 +249,77 @@
     color: black;
     border-radius: 10px;
     transition: background-color 0.3s;
-    position: relative; /* Добавляем position: relative для кнопки */
-    z-index: 1; /* Устанавливаем z-index для кнопки */
-   }
-   
-   .button:hover {
+    position: relative;
+    /* Добавляем position: relative для кнопки */
+    z-index: 1;
+    /* Устанавливаем z-index для кнопки */
+}
+
+.button:hover {
     background-color: #45a049;
-   }
-  
-   .circles {
+}
+
+.circles {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: auto auto;
-    gap: 650px; /* Расстояние между кругами */
+    gap: 650px;
+    /* Расстояние между кругами */
     row-gap: 170px;
-    position: absolute; /* Позволяет кругам перекрывать текст */
+    position: absolute;
+    /* Позволяет кругам перекрывать текст */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-   }
-   
-   .circle {
-    width: 250px; /* Ширина для верхних кругов */
-    height: 250px; /* Высота для кругов */
+}
+
+.circle {
+    width: 250px;
+    /* Ширина для верхних кругов */
+    height: 250px;
+    /* Высота для кругов */
     border-radius: 50%;
     box-shadow: 0 9px 10px rgba(0, 0, 0, 0.219), 0 1px 3px rgba(0, 0, 0, 0.1);
-   }
-   
-   .top-left {
+}
+
+.top-left {
     grid-column: 1;
     grid-row: 1;
-   }
-   
-   .top-right {
+}
+
+.top-right {
     grid-column: 2;
     grid-row: 1;
-   }
-   
-   .bottom-left {
+}
+
+.bottom-left {
     grid-column: 1;
     grid-row: 2;
     margin-left: 200px;
-   }
-   
-   .bottom-right {
+}
+
+.bottom-right {
     grid-column: 2;
     grid-row: 2;
-    margin-left: -200px; /* Сдвиг для нижнего правого круга */
-   }
-   
-   .circle.green.top-right {
+    margin-left: -200px;
+    /* Сдвиг для нижнего правого круга */
+}
+
+.circle.green.top-right {
     background: linear-gradient(100deg, #D9D9D9 25%, #BCE36A);
-   }
-   
-   .circle.green.bottom-left {
+}
+
+.circle.green.bottom-left {
     background: linear-gradient(230deg, #D9D9D9 25%, #BCE36A);
-   }
-  
-   .circle.purple.top-left {
+}
+
+.circle.purple.top-left {
     background: linear-gradient(120deg, #D9D9D9 25%, #C17BE2);
-   }
-   
-   .circle.purple.bottom-right {
+}
+
+.circle.purple.bottom-right {
     background: linear-gradient(70deg, #D9D9D9 25%, #C17BE2);
-   }
-  
+}
+
+
+

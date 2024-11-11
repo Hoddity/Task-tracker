@@ -10,6 +10,7 @@ function Home() {
             <h1>Привет {auth?.username}!</h1>
             <p>Ты вошел на сайт!</p>
             <p><Link to="/users">Управление пользователями</Link></p>
+            <p><Link to="/tasks">Доска</Link></p>
         </div>
     );
 }
