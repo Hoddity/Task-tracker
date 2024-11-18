@@ -17,11 +17,11 @@ export function ParametersPanel({ isOpen, onClose }) {
             <button onClick={onClose} className="close-button">✖</button>
 
             <nav className="navbar-nav">
+                
                 <NavLink to="/start" className="nav-item nav-link">Начало</NavLink>
-                <NavLink to="/" className="nav-item nav-link">Домой</NavLink>
                 <NavLink to="/users" className="nav-item nav-link">Пользователи</NavLink>
                 <NavLink to="/tasks" className="nav-item nav-link">Задачи</NavLink>
-                <button onClick={logout} className="btn  nav-item nav-link">Выход</button>
+                <button onClick={logout} className="nav-item nav-link">Выход</button>
             </nav>
         </div>
     );

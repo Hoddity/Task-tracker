@@ -25,9 +25,9 @@ function App() {
 
     return (
         <TaskProvider>
-            <div className="app-container bg-light">
+            <div className="app-container">
                 <Alert />
-                <div className="container pt-4 pb-4">
+                <div className="container">
                     <Routes>
                         {/* Приватные маршруты */}
                         <Route element={<PrivateRoute />}>

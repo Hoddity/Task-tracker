@@ -27,9 +27,7 @@ function Login() {
     }
 
     return (
-        
         <div className="card">
-            
             <div className="card-body">
             <Link to="../register" className="btn btn-link"><button className='btn-reg'>Регистрация</button></Link>
                 <h1 className='login-text'>Вход</h1>
@@ -49,6 +47,8 @@ function Login() {
                     
                 </form>
             </div>
+            
         </div>
+        
     )
 }
