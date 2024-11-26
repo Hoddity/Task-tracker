@@ -24,7 +24,7 @@ function Register() {
             .min(3, 'Логин должен содержать не менее 3 символа'),
         password: Yup.string()
             .required('Введите пароль')    
-            .min(6, 'Пароль должен содержать не менее 6 символов'),
+            .min(12, 'Пароль должен содержать не менее 12 символов'),
         confirmPassword: Yup.string()
         .required('Повторите пароль').oneOf([Yup.ref('password'), null], 'Пароли должны совпадать'),
         

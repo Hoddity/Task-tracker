@@ -53,6 +53,20 @@ function TaskBoard() {
                 return 'other';
         }
     };
+    const handleDeleteTask = (taskId) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = { ...prevTasks };
+            for (const key in updatedTasks) {
+                updatedTasks[key] = updatedTasks[key].filter((task) => task.id !== taskId);
+            }
+            return updatedTasks;
+        });
+    
+        setTaskFormOpen(false); // Закрываем форму редактирования
+        setSelectedTask(null);  // Сбрасываем выбранную задачу
+    };
+    
+
 
     const handleDragStart = (event, taskId) => {
         event.dataTransfer.setData('taskId', taskId);
@@ -101,7 +115,7 @@ function TaskBoard() {
         <div className={`task-board ${isTaskFormOpen ? 'dimmed' : ''}`}>
             {/* Кнопка Параметры */}
             <button onClick={() => setParametersOpen(true)} className="parameters-button">
-                
+
             </button>
 
             {/* Кнопка Фильтры */}
@@ -135,48 +149,38 @@ function TaskBoard() {
                 ))}
             </div>
 
-            {/* Панель описания задачи */}
-            {selectedTask && (
-                <div className="task-details-panel">
-                    <button className="close-button" onClick={() => setSelectedTask(null)}>✖</button>
-                    <div className="task-details-header">
-                        <h3>{selectedTask.title}</h3>
-                        <p className="task-author">Автор: {selectedTask.author || 'Не указан'}</p>
-                    </div>
-                    <div className="task-details-content">
-                        <div className="task-field">
-                            <strong>Заголовок:</strong>
-                            <p>{selectedTask.title || 'Нет данных'}</p>
-                        </div>
-                        <div className="task-field">
-                            <strong>Описание:</strong>
-                            <p>{selectedTask.description || 'Нет описания'}</p>
-                        </div>
-                        <div className="task-field">
-                            <strong>Команда:</strong>
-                            <p>{selectedTask.team || 'Нет команды'}</p>
-                        </div>
-                        <div className="task-field">
-                            <strong>Дедлайн:</strong>
-                            <p>{selectedTask.deadline || 'Не установлен'}</p>
-                        </div>
-                        <div className="task-field">
-                            <strong>Приоритет:</strong>
-                            <p>{selectedTask.priority}</p>
-                        </div>
-                        <div className="task-field">
-                            <strong>Статус:</strong>
-                            <p>{selectedTask.status}</p>
-                        </div>
-                    </div>
-                </div>
-            )}
+
 
             {/* Форма редактирования задачи */}
             {isTaskFormOpen && (
                 <TaskForm
                     task={selectedTask}
                     onSave={handleSaveTask}
+                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onClose={() => {
+                        setTaskFormOpen(false);
+                        setSelectedTask(null);
+                    }}
+                    mode={selectedTask ? 'edit' : 'create'}
+                />
+
+            )}
+
+            {selectedTask && !isTaskFormOpen && (
+                <TaskForm
+                    task={selectedTask}
+                    onClose={() => setSelectedTask(null)}
+                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onEdit={handleEditTask}
+                    mode="view"
+                />
+            )}
+
+            {isTaskFormOpen && (
+                <TaskForm
+                    task={selectedTask}
+                    onSave={handleSaveTask}
+                    onDelete={handleDeleteTask} // Передаем функцию удаления
                     onClose={() => {
                         setTaskFormOpen(false);
                         setSelectedTask(null);
@@ -185,17 +189,6 @@ function TaskBoard() {
                 />
             )}
             
-            {selectedTask && !isTaskFormOpen && (
-    <TaskForm
-        task={selectedTask}
-        onClose={() => setSelectedTask(null)}
-        onEdit={handleEditTask} // Передаем обработчик
-        mode="view" // Режим просмотра
-    />
-)}
-
-
-
             <ParametersPanel isOpen={isParametersOpen} onClose={() => setParametersOpen(false)} />
             <FiltersPanel isOpen={isFiltersOpen} onClose={() => setFiltersOpen(false)} />
         </div>

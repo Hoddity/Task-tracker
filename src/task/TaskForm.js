@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
+const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit }) => {
     const isViewMode = mode === 'view';
     const [formData, setFormData] = useState({
         title: '',
@@ -11,11 +11,11 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
         team: '',
         author: 'автор',
     });
+    const [isConfirmOpen, setConfirmOpen] = useState(false); // Состояние для подтверждения удаления
 
     // Заполняем форму при редактировании
     useEffect(() => {
         if (task) {
-            // Если редактируем задачу, заполняем форму
             setFormData({
                 title: task.title || '',
                 description: task.description || '',
@@ -25,20 +25,8 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
                 team: task.team || '',
                 author: task.author || 'автор',
             });
-        } else {
-            // Если создаем новую задачу, сбрасываем форму
-            setFormData({
-                title: '',
-                description: '',
-                deadline: '',
-                priority: 'Низкий',
-                status: 'Нужно сделать',
-                team: '',
-                author: 'автор',
-            });
         }
     }, [task]);
-    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -57,6 +45,14 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
         });
         onClose();
     };
+
+    const confirmDelete = () => {
+        if (onDelete && task?.id) {
+            onDelete(task.id); // Удаляем задачу по id
+        }
+        setConfirmOpen(false); // Закрываем диалог подтверждения
+    };
+    
 
     return (
         <>
@@ -128,6 +124,20 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
                         </select>
                     )}
 
+                    
+
+                    <label>Команда</label>
+                    {isViewMode ? (
+                        <p>{formData.team || 'Не указана'}</p>
+                    ) : (
+                        <input
+                            type="text"
+                            name="team"
+                            value={formData.team}
+                            onChange={handleInputChange}
+                        />
+                    )}
+
                     <label>Дедлайн</label>
                     {isViewMode ? (
                         <p>{formData.deadline || 'Не указан'}</p>
@@ -140,23 +150,23 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
                         />
                     )}
 
-                    <label>Команда</label>
-                    
                     {isViewMode ? (
-                        <p>{formData.team || 'Не указана'}</p>
-                    ) : (
-                        <input
-                            type="text"
-                            name="team"
-                            value={formData.team}
-                            onChange={handleInputChange}
-                        />
-                    )}
-
-                    {isViewMode ? (
-                        <button type="button" className="edit-button" onClick={onEdit}>
-                            Редактировать
-                        </button>
+                        <div className="button-group">
+                            <button
+                                type="button"
+                                className="edit-button"
+                                onClick={onEdit}
+                            >
+                                Редактировать
+                            </button>
+                            <button
+                                type="button"
+                                className="delete-button"
+                                onClick={() => setConfirmOpen(true)}
+                            >
+                                Удалить
+                            </button>
+                        </div>
                     ) : (
                         <button type="submit" className="submit-button">
                             {task ? 'Сохранить' : 'Создать'}
@@ -164,8 +174,38 @@ const TaskForm = ({ task, onClose, onSave, mode = 'view', onEdit }) => {
                     )}
                 </form>
             </div>
+                     {/* Затемнение фона */}
+        {isConfirmOpen && (
+            <div
+                className="dimmed-background"
+                onClick={() => setConfirmOpen(false)}
+            ></div>
+        )}
+            {/* Диалог подтверждения удаления */}
+            {isConfirmOpen && (
+    <div className="confirm-dialog">
+        
+        <p>Удалить задачу?</p>
+        <div className="confirm-buttons">
+            <button
+                onClick={confirmDelete}
+                className="confirm-delete-button"
+            >
+                Удалить
+            </button>
+            <button
+                onClick={() => setConfirmOpen(false)}
+                className="cancel-button"
+            >
+                Отмена
+            </button>
+        </div>
+    </div>
+)}
+
         </>
     );
 };
 
 export default TaskForm;
+

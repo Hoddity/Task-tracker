@@ -9,8 +9,12 @@ const TaskCard = ({ task, onClick, draggable, onDragStart }) => {
             onDragStart={onDragStart}
         >
             <h3>{task.title}</h3>
-            <p>Дедлайн: {task.deadline}</p>
-            <p>Команда: {task.team}</p>
+            <div className='task-card-info'>
+                <p>{task.deadline}</p>
+                <p>Команда: {task.team}</p>
+            </div>
+            
+            
         </div>
     );
 };
