@@ -10,11 +10,9 @@ const TaskCard = ({ task, onClick, draggable, onDragStart }) => {
         >
             <h3>{task.title}</h3>
             <div className='task-card-info'>
-                <p>{task.deadline}</p>
-                <p>Команда: {task.team}</p>
-            </div>
             
-            
+            <p><img src='src\img\account_circle.png' alt=''></img>{task.team}</p>
+            </div>         
         </div>
     );
 };

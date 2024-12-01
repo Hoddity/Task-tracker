@@ -1,14 +1,13 @@
 import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import React, { useState } from 'react';
 import { history } from '_helpers';
-import {Alert, PrivateRoute } from '_components';
+import {PrivateRoute } from '_components';
 import { Home } from 'home';
 import { AccountLayout } from 'account';
-import { UsersLayout } from 'users';
 import { Start } from 'start';
 import { TaskProvider } from '_components/TaskContext';
-import TaskBoard from 'task/TaskBoard';
-import TaskForm from 'task/TaskForm';
+import TaskBoard from './task/TaskBoard';
+import TaskForm from './task/TaskForm';
 
 export { App };
 
@@ -22,22 +21,21 @@ function App() {
 
     const openForm = () => setIsFormOpen(true);
     const closeForm = () => setIsFormOpen(false);
-
+    
     return (
         <TaskProvider>
             <div className="app-container">
-                <Alert />
                 <div className="container">
                     <Routes>
                         {/* Приватные маршруты */}
                         <Route element={<PrivateRoute />}>
                             <Route path="/" element={<Home />} />
-                            <Route path="users/*" element={<UsersLayout />} />
                             <Route path="tasks" element={<TaskBoard openForm={openForm} />} />
                         </Route>
 
                         {/* Публичные маршруты */}
-                        <Route path="start*" element={<Start/>}/>
+                        
+                        <Route path="start" element={<Start/>}/>
                         <Route path="account/*" element={<AccountLayout />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>

@@ -230,6 +230,22 @@ header {
     margin-top: 15px;
     border-radius: 4px;
 }
+.submit-edit-button{
+    background-color: #BCE36A;
+    color: rgb(0, 0, 0);
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    width: 140px;
+    margin-left: 45px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.submit-edit-button:hover{
+    background-color: #a8cb5d;
+}
+
 .parameters-panel {
     position: fixed;
     top: 10px;
@@ -331,8 +347,64 @@ header {
     margin-top: 35px;
     color: #666;
   }
+.red-star{
+    color: #FF0000;
+}
+.task-card-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
 
 
+.task-card-view {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 5px 13px;
+    margin: 8px 0;
+    height: 60px;
+    background-color: #FFFFFF;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+  }
+  
+  .task-card-view:hover {
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .task-card-view-title{
+    font-size: 16px;
+    text-align: left;
+    word-break:break-all;
+  }
+  .task-card-view p{
+    font-size: 12px;
+  }
+  .task-card-view-info{
+    display: block;
+    text-align: left;  
+    margin-top: 35px;
+    color: #666;
+  }
+  .task-card-buttons button {
+    border: none;
+    cursor: pointer;
+    width: 25px;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 25px;
+    border-radius:50%;
+  }
+  .card-view-button{
+    background-image: url(./img/more_horiz.png);
+  }
+  .card-edit-button{
+    background-image: url(./img/edit_note.png);
+  }
+  .chat-button{
+    background-image: url(./img/groups.png);
+  }
   /* Затемняющий слой */
 .backdrop {
     position: fixed;
@@ -442,10 +514,10 @@ header {
     background-color: #F9ABAB;
     color: rgb(0, 0, 0);
     border: none;
-    border-radius:5px ;
+    border-radius:10px ;
     padding: 10px 20px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .delete-button:hover {
@@ -479,13 +551,37 @@ header {
     justify-content: space-around;
     margin-top: 15px;
 }
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #d4edda;
+    color: #155724;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: 1px solid #c3e6cb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.notification button {
+    background: none;
+    border: none;
+    color: #155724;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
 
 .confirm-button {
     background-color: green;
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
 }

@@ -1,27 +1,30 @@
-// task_components/ParametersPanel.js
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { authActions } from '_store';
+import { authActions } from '_store/authActions';
 
 export function ParametersPanel({ isOpen, onClose }) {
-    const auth = useSelector(state => state.auth.value);
+    const auth = useSelector(state => state.auth.isAuthenticated);
     const dispatch = useDispatch();
-    const logout = () => dispatch(authActions.logout());
+    const navigate = useNavigate();
+
+    const logout = () => {
+        dispatch(authActions.logout());
+        navigate('/login'); // Редирект на страницу входа после выхода
+    };
 
     if (!isOpen || !auth) return null;
 
     return (
         <div className="parameters-panel">
-            <p className='nav-name'>Параметры</p>
+            <p className="nav-name">Параметры</p>
             <button onClick={onClose} className="close-button">✖</button>
 
             <nav className="navbar-nav">
-                
                 <NavLink to="/start" className="nav-item nav-link">Начало</NavLink>
                 <NavLink to="/users" className="nav-item nav-link">Пользователи</NavLink>
                 <NavLink to="/tasks" className="nav-item nav-link">Задачи</NavLink>
-                <button onClick={logout} className="nav-item nav-link">Выход</button>
+                <button onClick={logout} className="nav-item nav-link logout-button">Выход</button>
             </nav>
         </div>
     );

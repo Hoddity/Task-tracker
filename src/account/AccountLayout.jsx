@@ -2,11 +2,10 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import { Login, Register } from './';
-import { Start } from 'start';
 export { AccountLayout };
 
 function AccountLayout() {
-    const auth = useSelector(x => x.auth.value);
+    const auth = useSelector(state => state.auth.value);
 
     // redirect to home if already logged in
     if (auth) {

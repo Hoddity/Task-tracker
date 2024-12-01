@@ -61,7 +61,25 @@
     margin-top: 70px;
     }
 
-
+    .input-group {
+        position: relative;
+    }
+    
+    .eye-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #6c757d;
+        font-size: 18px;
+    }
+    .eye-button:focus {
+        outline: none;
+    }
+    
 .card-body {
     display: table;
     margin: auto;

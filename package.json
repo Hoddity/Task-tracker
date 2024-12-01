@@ -19,11 +19,14 @@
         "react-scripts": "5.0.1",
         "yup": "^0.32.11"
     },
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "eject": "react-scripts eject"
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' https://cdn.mxpnl.com; object-src 'self'"
     },
+    "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test"
+},
     "eslintConfig": {
         "extends": [
             "react-app"
@@ -43,5 +46,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "react-app-rewired": "^2.2.1"
     }
 }
