@@ -2,12 +2,10 @@ import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-
 import React, { useState } from 'react';
 import { history } from '_helpers';
 import {PrivateRoute } from '_components';
-import { Home } from 'home';
 import { AccountLayout } from 'account';
 import { Start } from 'start';
 import { TaskProvider } from '_components/TaskContext';
 import TaskBoard from './task/TaskBoard';
-import TaskForm from './task/TaskForm';
 import { ProfilePage } from 'account/ProfilePage';
 export { App };
 
@@ -28,7 +26,7 @@ function App() {
                     <Routes>
                         {/* Приватные маршруты */}
                         <Route element={<PrivateRoute />}>
-                            <Route path="/" element={<Home />} />
+                            <Route path="/" element={<Start />} />
                             <Route path="tasks" element={<TaskBoard openForm={openForm} />} />
                             <Route path='profile' element={<ProfilePage/>} />
                         </Route>
