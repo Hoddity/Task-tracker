@@ -1,11 +1,21 @@
 export const authActions = {
-    loginSuccess: (token) => ({ type: 'auth/loginSuccess', payload: token }),
+    loginSuccess: (tokens) => ({
+        type: 'auth/loginSuccess',
+        payload: {
+            refresh: tokens.refresh,
+            access: tokens.access,
+            user: tokens.user,
+        },
+    }),
     logout: () => ({ type: 'auth/logout' }),
 };
 
 // Reducer для обработки действий
 const initialState = {
     isAuthenticated: false, // По умолчанию пользователь не авторизован
+    refreshToken: null,
+    accessToken: null,
+    user: null,
 };
 
 export function authReducer(state = initialState, action) {
@@ -14,11 +24,18 @@ export function authReducer(state = initialState, action) {
             return {
                 ...state,
                 isAuthenticated: true,
-                token: action.payload.token,  // предполагается, что в action.payload передается токен
-                user: action.payload.user,    // если возвращаете информацию о пользователе
+                refreshToken: action.payload.refresh, // Сохраняем refresh токен
+                accessToken: action.payload.access,  // Сохраняем access токен
+                user: action.payload.user,           // Сохраняем информацию о пользователе
             };
         case 'auth/logout':
-            return { ...state, isAuthenticated: false };
+            return {
+                ...state,
+                isAuthenticated: false,
+                refreshToken: null,
+                accessToken: null,
+                user: null,
+            };
         default:
             return state;
     }
