@@ -275,8 +275,10 @@
     color: rgb(0, 0, 0);
     text-decoration: none;
     padding: 10px 0;
+    text-align: center;
     background-color: #ECECEC;
     border-radius: 10px;
+    
 }
 
 .nav-item:hover {

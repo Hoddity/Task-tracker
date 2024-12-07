@@ -32,22 +32,16 @@ html{
     background-color: #E7E7E7;
 }
 
-#alert {
-    display: none;
-    color: red;
-    margin-bottom: 10px;
-}
+
 
 /*Вход */
 
 .form-control {
     background-color: #D9D9D9;
     height: 50px;
-    
     width: 410px;
     text-align: left;
     border-radius: 10px;
-    margin: auto;
     font-size: 24px;
 }
 
@@ -62,25 +56,6 @@ html{
     display: block;
     margin: auto;
     margin-top: 70px;
-    }
-
-    .input-group {
-        position: relative;
-    }
-    
-    .eye-button {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #6c757d;
-        font-size: 18px;
-    }
-    .eye-button:focus {
-        outline: none;
     }
 
     
@@ -177,11 +152,20 @@ html{
     background: linear-gradient(to right, #C17BE2, #BCE36A);
 }
 
-.logInput {
+.regInput {
     margin-bottom: 35px;
     height: 50px;
+    width: 420px;
 }
-
+.logInput{
+  display: flex;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 35px;
+    height: 50px;
+    width: 420px;
+}
 
 .invalid-feedback {
     font-size: 15px;
@@ -314,17 +298,20 @@ html{
   
   /* Сообщения об ошибке или успехе */
   .alert {
-    margin-top: 10px;
+    margin-top: -38px;
     padding: 10px;
     border-radius: 5px;
-    font-size: 0.9rem;
-    width: 100%;
+    font-size: 16px;
+    width: 430px;
     text-align: center;
+    display: block;
+    justify-content: center;
   }
   
   
   .alert-danger {
     color: #FF0000;
+
     font-weight: 400;
   }
   

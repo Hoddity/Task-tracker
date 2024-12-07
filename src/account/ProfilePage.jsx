@@ -3,10 +3,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";  // Импортируем useNavigate для навигации
 // import { updateProfile } from "_store/authActions"; // Предполагаем, что это действие для обновления профиля
 
 export function ProfilePage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();  // Инициализируем navigate
   const user = useSelector((state) => state.auth.user);
 
   const [successMessage, setSuccessMessage] = useState("");
@@ -33,6 +35,7 @@ export function ProfilePage() {
       // Отправка данных на сервер через Redux action
       // await dispatch(
       //   updateProfile({
+              
       //     firstName: data.firstName,
       //     lastName: data.lastName,
       //     password: data.password || undefined, // Обновляем только если пароль введен
@@ -46,6 +49,10 @@ export function ProfilePage() {
     }
   };
 
+  const handleGoToTasks = () => {
+    navigate("/tasks");  // Переход к задачам через React Router
+  };
+
   return (
     <div className="profile-page">
       <h1>Настройка аккаунта</h1>
@@ -53,6 +60,7 @@ export function ProfilePage() {
         <div className="form-group">
           <label>Логин</label>
           <input
+            name="login"
             type="text"
             value={user?.username || ""}
             disabled
@@ -108,9 +116,9 @@ export function ProfilePage() {
       </form>
       <button
         className="btn btn-secondary mt-3"
-        onClick={() => (window.location.href = "/")}
+        onClick={handleGoToTasks}  // Используем обработчик навигации
       >
-        На главную
+        К задачам
       </button>
     </div>
   );

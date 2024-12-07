@@ -22,10 +22,11 @@ export function ParametersPanel({ isOpen, onClose }) {
 
             <nav className="navbar-nav">
                 {/* <NavLink to  className="nav-item nav-link">Интеграции</NavLink> */}
-                <NavLink to="/start" className="nav-item nav-link">Начало</NavLink>
+                <NavLink to="/" className="nav-item nav-link">Начало</NavLink>
                 <NavLink to="/profile" className="nav-item nav-link">Профиль</NavLink>
                 <NavLink to="/tasks" className="nav-item nav-link">Задачи</NavLink>
-                <button onClick={logout} className="nav-item nav-link logout-button">Выход</button>
+                <NavLink to="/integrations" className="nav-item nav-link">Интеграции</NavLink>
+                <button onClick={logout} className="nav-item nav-link">Выход</button>
             </nav>
         </div>
     );

@@ -8,6 +8,7 @@ import { App } from './App';
 import './index.css';
 import './task.css'
 import './start.css'
+import './integrations.css'
 
 const container = document.getElementById('root');
 const root = createRoot(container);
