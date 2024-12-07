@@ -2,13 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import axios from 'axios';
+import api from 'api/axios';  // Импортируем настроенный axios
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '_store/authActions';
 
 export { Login };
-
 
 function Login() {
     const navigate = useNavigate();
@@ -37,8 +36,8 @@ function Login() {
         setErrorMessage('');
     
         try {
-            const response = await axios.post(
-                'http://127.0.0.1:8000/accaunts/login/',
+            const response = await api.post(  // Используем настроенный axios
+                '/accaunts/login/',  // Исправьте путь, если нужно
                 { username, password },
                 {
                     headers: {
@@ -48,20 +47,23 @@ function Login() {
                 }
             );
     
-            // Получение токена из ответа сервера
-            const token = response.data?.Token;  // Теперь используется 'Token' из ответа сервера
+            // Получение токенов из ответа сервера
+            const { refresh, access } = response.data?.tokens || {};
             const user = response.data?.user;
-            if (token) {
-                // Сохраните токен в localStorage
-                localStorage.setItem('authToken', token);
+    
+            if (refresh && access) {
+                // Сохраните токены и данные пользователя в localStorage
+                localStorage.setItem('refreshToken', refresh);
+                localStorage.setItem('accessToken', access);
                 localStorage.setItem('authUser', JSON.stringify(user));
-                // Обновление состояния в Redux (например, отправка токена)
-                dispatch(authActions.loginSuccess({ token }));
+    
+                // Обновление состояния в Redux
+                dispatch(authActions.loginSuccess({ refresh, access, user }));
     
                 // Перенаправление на страницу задач
                 navigate('/tasks', { replace: true });
             } else {
-                setErrorMessage('Токен отсутствует в ответе сервера.');
+                setErrorMessage('Токены отсутствуют в ответе сервера.');
             }
         } catch (error) {
             setErrorMessage(
@@ -70,7 +72,7 @@ function Login() {
             console.error('Ошибка API:', error);
         } finally {
             setLoading(false);
-        }   
+        }
     }
 
     return (
