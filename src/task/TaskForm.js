@@ -35,7 +35,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit }) =>
                 {/* Уведомление о сохранении */}
                 {isSaved && (
                     <div className="notification">
-                        <span>✅ Сохранено</span>
+                        <span> Сохранено</span>
                         <button onClick={() => setIsSaved(false)}>✖</button>
                     </div>
                 )}

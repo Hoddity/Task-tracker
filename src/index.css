@@ -5,7 +5,10 @@
     
     font-size: 24px;
 }
-
+html{
+    margin: 0;
+    padding: 0;
+}
 
 @font-face {
     font-family: "Days";
@@ -26,7 +29,7 @@
     font-weight: 400;
     font-size: 24px;
     color: #000000;
-    
+    background-color: #E7E7E7;
 }
 
 #alert {
@@ -79,6 +82,7 @@
     .eye-button:focus {
         outline: none;
     }
+
     
 .card-body {
     display: table;
@@ -190,16 +194,9 @@
     margin: auto;
 }
 
-.alert {
-    display: block;
-    margin: auto;
-    width: 500px;
-    color: rgba(219, 76, 76, 0.903);
 
-}
 
 /*Стартовая страница*/
-.start-page {}
 
 .start-div {
     display: contents;
@@ -213,135 +210,155 @@
     font-weight: 400;
 }
 
-.start-text {}
-
-.start-button {}
 
 
-
-
-/**/
-.start-page {
-    margin: 0;
-    padding: 0;
-    background-color: #E7E7E7;
+/* Профиль */
+/* Основной стиль для страницы */
+.profile-page {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    height: 100vh;
-    position: relative;
-    /* Добавляем position: relative для родительского элемента */
-}
-
-.container {
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to right, #ffffff, #C17BE2);
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  /* Заголовок страницы */
+  .profile-page h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #000000;
     text-align: center;
-    position: relative;
-    /* Для позиционирования кругов */
-}
-
-.start-title {
-    font-family: Ambidexter;
-    font-size: 128px;
-    font-weight: 400;
-    line-height: 100px;
-    margin-bottom: 15px;
-    position: relative;
-    /* Добавляем position: relative для заголовка */
-    z-index: 1;
-    /* Устанавливаем z-index для заголовка */
-}
-
-.start-description {
-    font-size: 20px;
-    text-align: center;
-    margin-bottom: 15px;
-    position: relative;
-    /* Добавляем position: relative для описания */
-    z-index: 1;
-    /* Устанавливаем z-index для описания */
-}
-
-.start-button {
-    background: linear-gradient(to left, #C17BE2, #BCE36A);
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    color: black;
+  }
+  
+  /* Форма */
+  .profile-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 400px;
+    background: #f9f9f9;
     border-radius: 10px;
-    transition: background-color 0.3s;
-    position: relative;
-    /* Добавляем position: relative для кнопки */
-    z-index: 1;
-    /* Устанавливаем z-index для кнопки */
-}
-
-.button:hover {
-    background-color: #45a049;
-}
-
-.circles {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: auto auto;
-    gap: 650px;
-    /* Расстояние между кругами */
-    row-gap: 170px;
-    position: absolute;
-    /* Позволяет кругам перекрывать текст */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.circle {
-    width: 250px;
-    /* Ширина для верхних кругов */
-    height: 250px;
-    /* Высота для кругов */
-    border-radius: 50%;
-    box-shadow: 0 9px 10px rgba(0, 0, 0, 0.219), 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.top-left {
-    grid-column: 1;
-    grid-row: 1;
-}
-
-.top-right {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.bottom-left {
-    grid-column: 1;
-    grid-row: 2;
-    margin-left: 200px;
-}
-
-.bottom-right {
-    grid-column: 2;
-    grid-row: 2;
-    margin-left: -200px;
-    /* Сдвиг для нижнего правого круга */
-}
-
-.circle.green.top-right {
-    background: linear-gradient(100deg, #D9D9D9 25%, #BCE36A);
-}
-
-.circle.green.bottom-left {
-    background: linear-gradient(230deg, #D9D9D9 25%, #BCE36A);
-}
-
-.circle.purple.top-left {
-    background: linear-gradient(120deg, #D9D9D9 25%, #C17BE2);
-}
-
-.circle.purple.bottom-right {
-    background: linear-gradient(70deg, #D9D9D9 25%, #C17BE2);
-}
-
-
-
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Поля формы */
+  .profile-form .form-group {
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Подписи к полям */
+  .profile-form .form-group label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #000000;
+    margin-bottom: 5px;
+  }
+  
+  /* Поля ввода */
+  .profile-form .form-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+    color: #000000;
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  .profile-form .form-group input:focus {
+    border-color: #a67ef9;
+  }
+  
+  /* Стиль кнопок */
+  .profile-form .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease-in-out;
+  }
+  
+  .profile-form .btn-primary {
+    background-color: #a67ef9;
+    color: #ffffff;
+  }
+  
+  .profile-form .btn-primary:hover {
+    background-color: #884fc9;
+  }
+  
+  .profile-form .btn-secondary {
+    background-color: #e6e6e6;
+    color: #000000;
+    margin-top: 10px;
+  }
+  
+  .profile-form .btn-secondary:hover {
+    background-color: #d3d3d3;
+  }
+  
+  /* Сообщения об ошибке или успехе */
+  .alert {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: center;
+  }
+  
+  
+  .alert-danger {
+    color: #FF0000;
+    font-weight: 400;
+  }
+  
+  /* Кнопка "На главную" */
+  .profile-page .btn-secondary {
+    width: auto;
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    font-size: 1rem;
+    color: #ffffff;
+    background-color: #a67ef9;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .profile-page .btn-secondary:hover {
+    background-color: #884fc9;
+  }
+  
+  /* Адаптивность */
+  @media (max-width: 768px) {
+    .profile-form {
+      padding: 15px;
+    }
+  
+    .profile-page h1 {
+      font-size: 1.5rem;
+    }
+  
+    .profile-form .btn {
+      font-size: 0.9rem;
+    }
+  }
+  

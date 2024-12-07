@@ -7,6 +7,7 @@ import store  from './_store/index';
 import { App } from './App';
 import './index.css';
 import './task.css'
+import './start.css'
 
 const container = document.getElementById('root');
 const root = createRoot(container);

@@ -2,11 +2,11 @@
     font-weight: 400;
 }
 
-header {
+/* header {
     background-color: #282c34;
     padding: 1rem;
     color: white;
-}
+} */
 
 .task-board {
     display: flex;

@@ -8,7 +8,7 @@ import { Start } from 'start';
 import { TaskProvider } from '_components/TaskContext';
 import TaskBoard from './task/TaskBoard';
 import TaskForm from './task/TaskForm';
-
+import { ProfilePage } from 'account/ProfilePage';
 export { App };
 
 function App() {
@@ -17,10 +17,9 @@ function App() {
     history.location = useLocation();
 
     // Состояние для управления видимостью формы задачи
-    const [isFormOpen, setIsFormOpen] = useState(false);
+    const [setIsFormOpen] = useState(false);
 
     const openForm = () => setIsFormOpen(true);
-    const closeForm = () => setIsFormOpen(false);
     
     return (
         <TaskProvider>
@@ -31,6 +30,7 @@ function App() {
                         <Route element={<PrivateRoute />}>
                             <Route path="/" element={<Home />} />
                             <Route path="tasks" element={<TaskBoard openForm={openForm} />} />
+                            <Route path='profile' element={<ProfilePage/>} />
                         </Route>
 
                         {/* Публичные маршруты */}
@@ -40,14 +40,6 @@ function App() {
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
                 </div>
-
-                {/* Модальное окно с формой создания задачи */}
-                {isFormOpen && (
-                    <div className="modal">
-                        <TaskForm onClose={closeForm} />
-                        <button onClick={closeForm} className="close-button">Закрыть</button>
-                    </div>
-                )}
             </div>
         </TaskProvider>
     );
