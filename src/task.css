@@ -49,6 +49,7 @@
 }
 .task-columns h3{
     font-weight: 400;
+    text-align: center;
 }
 .task-column.drag-over {
     border-color: #007bff;
@@ -226,6 +227,10 @@
     padding: 8px;
     border: none;
     cursor: pointer;
+    align-items: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     width: 140px;
     margin-top: 15px;
     border-radius: 4px;
@@ -267,6 +272,7 @@
 }
 .nav-name{
     margin-top:5px ;
+    text-align: center;
     margin-bottom: 20px;
     color: #000000;
 }
@@ -547,6 +553,12 @@
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+.button-group{
+    align-items: center;
+    display: block;
+    margin-left: 80px;
+    
 }
 .confirm-dialog .confirm-buttons {
     display: flex;

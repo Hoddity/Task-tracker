@@ -10,6 +10,9 @@ export function Start() {
   };
 
   return (
+    <html className="page">
+
+    
     <div className="start-page">
       <header>
         <nav className="nav-bar">
@@ -24,7 +27,7 @@ export function Start() {
           </Link>
         </nav>
         <div className="container">
-          <div class="titles-container">
+          <div className="titles-container">
             <h1 className="start-title">Task Track</h1>
             <p className="start-description">
               Бесплатный трекер с удобным дизайном <br /> и огромным функционалом.
@@ -60,17 +63,15 @@ export function Start() {
         <section id="features" className="section">
           <h2 className="medium-title">Функционал</h2>
           <div className="features-container">
-            <div className="feature-item">
-              <h3>Добавление задач</h3>
-              <p>Создавайте и редактируйте задачи с помощью удобного интерфейса.</p>
+            <div className="feature-item1 feature-item">
+              <p>Дополнительно: Фильтры и Параметры</p>
             </div>
-            <div className="feature-item">
-              <h3>Фильтры и параметры</h3>
-              <p>Настраивайте задачи для вашего удобства.</p>
+            <div className="feature-item2 feature-item" >
+              <p>Внутренний функционал. 
+              Редактирование Задачи.Информация о задаче. Комментарии.</p>
             </div>
-            <div className="feature-item">
-              <h3>Внутренняя коммуникация</h3>
-              <p>Оставляйте комментарии и обсуждайте задачи с коллегами.</p>
+            <div className="feature-item3 feature-item">
+              <p>Добавление и редактирование задачи.</p>
             </div>
           </div>
         </section>
@@ -96,6 +97,6 @@ export function Start() {
           <p>Email</p>
         </nav>
       </footer>
-    </div>
+    </div></html>
   );
 }

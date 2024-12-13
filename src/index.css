@@ -30,10 +30,17 @@ html{
     font-size: 24px;
     color: #000000;
     background-color: #E7E7E7;
+    
 }
 
-
-
+.app-container{
+  background-image: url("img/fon.jpg");
+  background-position: center -36px;
+  height: 650px;
+  background-size:84.9%;
+  background-repeat: no-repeat;
+  
+}
 /*Вход */
 
 .form-control {

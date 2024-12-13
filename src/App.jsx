@@ -7,6 +7,7 @@ import { Start } from 'start';
 import { TaskProvider } from '_components/TaskContext';
 import TaskBoard from './task/TaskBoard';
 import { ProfilePage } from 'account/ProfilePage';
+import { Integrations } from 'integrations/integrations';
 export { App };
 
 function App() {
@@ -26,14 +27,13 @@ function App() {
                     <Routes>
                         {/* Приватные маршруты */}
                         <Route element={<PrivateRoute />}>
-                            <Route path="/" element={<Start />} />
-                            <Route path="tasks" element={<TaskBoard openForm={openForm} />} />
                             <Route path='profile' element={<ProfilePage/>} />
+                            <Route path="tasks" element={<TaskBoard openForm={openForm} />} />
+                            <Route path="integrations" element={<Integrations/>} />
                         </Route>
 
                         {/* Публичные маршруты */}
-                        
-                        <Route path="start" element={<Start/>}/>
+                        <Route path="/" element={<Start />} />
                         <Route path="account/*" element={<AccountLayout />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
