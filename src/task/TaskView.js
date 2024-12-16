@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TaskView = ({ task, onEditClick, onViewClick, draggable, onDragStart }) => {
+const TaskView = ({ task, onEditClick, onViewClick, draggable, onDragStart,onChatClick }) => {
     return (
         <div
             className="task-card-view"
@@ -13,8 +13,10 @@ const TaskView = ({ task, onEditClick, onViewClick, draggable, onDragStart }) =>
                 </button>
                 <button onClick={onViewClick} className="card-view-button">
                 </button>
-                <button className="chat-button">
-                </button>
+                <button className="chat-button" onClick={(e) => {
+                e.stopPropagation(); // Предотвращаем всплытие события
+                onChatClick();
+            }}></button>
             </div>
         </div>
         

@@ -627,4 +627,31 @@
     background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный черный */
     z-index: 1002; /* На переднем плане */
 }
+.task-chat-sidebar {
+    width: 300px;
+    padding: 10px;
+    background: #fff;
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100%;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
 
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 5px;
+}

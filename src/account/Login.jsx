@@ -57,7 +57,7 @@ function Login() {
                 localStorage.setItem('refreshToken', refresh);
                 localStorage.setItem('accessToken', access);
                 localStorage.setItem('authUser', JSON.stringify(user));
-
+                
                 // Обновляем состояние в Redux
                 dispatch(authActions.loginSuccess({ refresh, access, user }));
 

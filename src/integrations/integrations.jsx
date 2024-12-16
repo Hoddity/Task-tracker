@@ -1,4 +1,5 @@
 import React from "react";
+import { yg,td,jira } from "img/people";
 
 export const Integrations = () => {
   return (
@@ -7,7 +8,7 @@ export const Integrations = () => {
       <div className="integrations">
         <div className="integration-card">
           <img
-            src="../img/jira.png"
+            src={jira}
             alt="Jira"
             className="integration-logo"
           />
@@ -16,7 +17,7 @@ export const Integrations = () => {
         </div>
         <div className="integration-card">
           <img
-            src="src\img\yougile.png"
+            src={yg}
             alt="Yougile"
             className="integration-logo"
           />
@@ -25,7 +26,7 @@ export const Integrations = () => {
         </div>
         <div className="integration-card">
           <img
-            src="src\img\todoist.png"
+            src={td}
             alt="Todoist"
             className="integration-logo"
           />

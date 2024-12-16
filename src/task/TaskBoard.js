@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import TaskCard from './TaskCard';
 import TaskForm from './TaskForm';
+import TaskChat from './TaskChat';
 import { ParametersPanel } from 'task_components/ParametersPanel';
 import { FiltersPanel } from 'task_components/FiltersPanel';
 
@@ -19,24 +21,24 @@ function TaskBoard() {
 
     // Сохранение новой или отредактированной задачи
     const handleSaveTask = (task) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = { ...prevTasks };
+            setTasks((prevTasks) => {
+                const updatedTasks = { ...prevTasks };
 
             // Если задача редактируется
-            if (task.id) {
-                for (const key in updatedTasks) {
-                    updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
-                }
+                if (task.id) {
+                    for (const key in updatedTasks) {
+                        updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
+                    }
             } else {
                 task.id = Date.now().toString();
-            }
+                }
 
             updatedTasks[getStatusKey(task.status)].push(task);
-            return updatedTasks;
-        });
+                return updatedTasks;
+            });
 
-        setTaskFormOpen(false);
-        setSelectedTask(null);
+            setTaskFormOpen(false);
+            setSelectedTask(null);
     };
 
     const getStatusKey = (status) => {
@@ -53,6 +55,7 @@ function TaskBoard() {
                 return 'other';
         }
     };
+
     const handleDeleteTask = (taskId) => {
         setTasks((prevTasks) => {
             const updatedTasks = { ...prevTasks };
@@ -61,12 +64,10 @@ function TaskBoard() {
             }
             return updatedTasks;
         });
-    
+
         setTaskFormOpen(false); // Закрываем форму редактирования
         setSelectedTask(null);  // Сбрасываем выбранную задачу
     };
-    
-
 
     const handleDragStart = (event, taskId) => {
         event.dataTransfer.setData('taskId', taskId);
@@ -104,6 +105,7 @@ function TaskBoard() {
     const handleDragOver = (event) => {
         event.preventDefault();
     };
+
     const [formMode, setFormMode] = useState('view'); // view | edit | create
 
     const handleEditTask = () => {
@@ -114,17 +116,13 @@ function TaskBoard() {
     return (
         <div className={`task-board ${isTaskFormOpen ? 'dimmed' : ''}`}>
             {/* Кнопка Параметры */}
-            <button onClick={() => setParametersOpen(true)} className="parameters-button">
-
-            </button>
+            <button onClick={() => setParametersOpen(true)} className="parameters-button"></button>
 
             {/* Кнопка Фильтры */}
-            <button onClick={() => setFiltersOpen(true)} className="filters-button">
-            </button>
+            <button onClick={() => setFiltersOpen(true)} className="filters-button"></button>
 
             {/* Кнопка добавления задачи */}
-            <button onClick={() => setTaskFormOpen(true)} className="add-task-button">
-            </button>
+            <button onClick={() => setTaskFormOpen(true)} className="add-task-button"></button>
 
             {/* Колонки задач */}
             <div className="task-columns">
@@ -140,7 +138,10 @@ function TaskBoard() {
                             <TaskCard
                                 key={task.id}
                                 task={task}
-                                onClick={() => setSelectedTask(task)} // Открыть панель описания
+                                onClick={() => {
+                                    setSelectedTask(task);
+                                    setChatOpen(false);
+                                }}
                                 draggable
                                 onDragStart={(event) => handleDragStart(event, task.id)}
                             />
@@ -149,46 +150,39 @@ function TaskBoard() {
                 ))}
             </div>
 
-
-
             {/* Форма редактирования задачи */}
             {isTaskFormOpen && (
                 <TaskForm
                     task={selectedTask}
                     onSave={handleSaveTask}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onDelete={handleDeleteTask}
                     onClose={() => {
                         setTaskFormOpen(false);
                         setSelectedTask(null);
                     }}
                     mode={selectedTask ? 'edit' : 'create'}
                 />
-
             )}
 
-            {selectedTask && !isTaskFormOpen && (
+            {/* Панель описания задачи */}
+            {selectedTask && !isTaskFormOpen && !isChatOpen && (
                 <TaskForm
                     task={selectedTask}
                     onClose={() => setSelectedTask(null)}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onDelete={handleDeleteTask}
                     onEdit={handleEditTask}
                     mode="view"
                 />
             )}
 
-            {isTaskFormOpen && (
-                <TaskForm
+            {/* Панель чата */}
+            {isChatOpen && selectedTask && (
+                <TaskChat
                     task={selectedTask}
-                    onSave={handleSaveTask}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
-                    onClose={() => {
-                        setTaskFormOpen(false);
-                        setSelectedTask(null);
-                    }}
-                    mode={selectedTask ? 'edit' : 'create'}
+                    onClose={() => setChatOpen(false)}
                 />
             )}
-            
+
             <ParametersPanel isOpen={isParametersOpen} onClose={() => setParametersOpen(false)} />
             <FiltersPanel isOpen={isFiltersOpen} onClose={() => setFiltersOpen(false)} />
         </div>
