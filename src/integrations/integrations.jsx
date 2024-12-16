@@ -4,13 +4,13 @@ import { yg,td,jira } from "img/people";
 export const Integrations = () => {
   return (
     <div className="integrations-container">
-      <h1>Интеграции</h1>
+      <h1 className="int">Интеграции</h1>
       <div className="integrations">
         <div className="integration-card">
           <img
             src={jira}
             alt="Jira"
-            className="integration-logo"
+            className="integration-logo jira"
           />
           <p>Jira</p>
           <button>Подключить</button>
@@ -19,7 +19,7 @@ export const Integrations = () => {
           <img
             src={yg}
             alt="Yougile"
-            className="integration-logo"
+            className="integration-logo yg"
           />
           <p>Yougile</p>
           <button>Подключить</button>
@@ -28,13 +28,13 @@ export const Integrations = () => {
           <img
             src={td}
             alt="Todoist"
-            className="integration-logo"
+            className="integration-logo td"
           />
           <p>Todoist</p>
           <button>Подключить</button>
         </div>
       </div>
-      <a href="/tasks" className="home-link">
+      <a href="/" className="home-link">
         <button>На главную</button>
       </a>
     </div>

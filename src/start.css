@@ -232,7 +232,7 @@ body {
     margin-right: auto;
 
 }
-.integrations-container{
+/* .integrations-container{
     background: linear-gradient(to right,#ECECEC 60%, #BCE36A );
     height: 700px;
 }
@@ -250,4 +250,107 @@ body {
     height: 300px;
     width: 380px;
     align-items: center;
-}
+} */
+.integrations-container {
+    display: flex;
+    height: 680px;
+    margin-bottom: -10px;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(to right, #ECECEC 60%, #BCE36A);
+    padding: 20px;
+    max-width: 1900px; /* Set a max width for responsiveness */
+    margin: 20px auto; /* Center the container */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    margin-top: -10px;
+    border-radius: 5px; /*container background*/
+  }
+  
+  
+  .int {
+    text-align: center;
+    font-size: 36px;
+    margin-top: 55px;
+    margin-bottom: 60px;
+  }
+  
+  .integrations {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap onto multiple lines on smaller screens */
+    justify-content: center; /* Center the cards horizontally */
+    gap: 20px; /* Space between cards */
+  }
+  
+  .integration-card {
+    background-color: #D9D9D9; /* Card background color */
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    width: 380px; /* Adjust width as needed */
+    height: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle box shadow */
+    min-height: 180px; /*added this to keep uniform height*/
+  }
+  
+  .integration-logo { /* Adjust max-width as needed */
+    margin-bottom: 10px;
+    max-height: 170px;
+  }
+  
+  
+  .integration-card p {
+    margin-bottom: 15px;
+  }
+  
+  .integration-card button {
+     /* Green button */
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .home-link{
+      margin-top: 20px;
+      text-align: center;
+  
+  }
+  .home-link button{
+      background-color: #BCE36A; /* Blue button */
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .jira{
+    width: 350px;
+    height: 128px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+  }
+  
+  /* Responsive adjustments for smaller screens */
+  @media (max-width: 768px) {
+    .integration-card {
+      width: calc(50% - 10px); /* Adjust width to 50% */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .integration-card {
+      width: 100%; /* Adjust width to 100% */
+    }
+  }
+  .integrat{
+   
+  }
