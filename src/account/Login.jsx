@@ -78,14 +78,14 @@ function Login() {
     };
 
     return (
-        <div className='log-reg-back'>
+        <div className="log-reg-back">
             <div className="card">
                 <div className="card-body">
                     <Link to="../register" className="btn btn-link">
                         <button className="btn-reg">Регистрация</button>
                     </Link>
                     <h1 className="login-text">Вход</h1>
-                    <form onSubmit={handleSubmit(onSubmit)} className="login-form">
+                    <form onSubmit={handleSubmit(onSubmit)} className="inputs">
                         <div className="logInput">
                             <input
                                 name="username"
@@ -93,21 +93,23 @@ function Login() {
                                 {...register('username')}
                                 placeholder="Логин"
                                 className={`form-control ${errors.username ? 'is-invalid' : ''}`}
-                            />
-
-                        </div><div className="invalid-feedback">{errors.username?.message}</div>
+                            /></div>
+                            {errors.username && (
+                                <div className="invalid-feedback">{errors.username.message}</div>
+                            )}
+                        
                         <div className="logInput">
-                            <div className="input-group">
                                 <input
                                     name="password"
                                     type="password"
                                     {...register('password')}
                                     placeholder="Пароль"
                                     className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                                />
-                            </div>
-
-                        </div><div className="invalid-feedback">{errors.password?.message}</div>
+                                /></div>
+                            {errors.password && (
+                                <div className="invalid-feedback">{errors.password.message}</div>
+                            )}
+                        
                         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                         <button disabled={isSubmitting || loading} className="btn btn-primary-log">
                             {loading && <span className="spinner-border spinner-border-sm me-1"></span>}
@@ -117,5 +119,5 @@ function Login() {
                 </div>
             </div>
         </div>
-    );
+    );    
 }

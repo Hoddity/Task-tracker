@@ -188,7 +188,9 @@ html{
 
 .invalid-feedback {
     font-size: 15px;
-
+    margin-top: -20px;
+    margin-left: 4px;
+    margin-bottom: 2px;
     color: #ff0000af;
 }
 

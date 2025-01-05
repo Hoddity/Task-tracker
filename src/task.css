@@ -402,6 +402,7 @@
     background-position: center;
     background-repeat: no-repeat;
     height: 25px;
+    background-color: none;
     border-radius:50%;
   }
   .card-view-button{
@@ -412,6 +413,8 @@
   }
   .chat-button{
     background-image: url(./img/groups.png);
+    background-size: 18px;
+    background-color: none;
   }
   /* Затемняющий слой */
 .backdrop {
@@ -565,30 +568,8 @@
     justify-content: space-around;
     margin-top: 15px;
 }
-.notification {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background-color: #d4edda;
-    color: #155724;
-    padding: 10px 20px;
-    border-radius: 5px;
-    border: 1px solid #c3e6cb;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
 
-.notification button {
-    background: none;
-    border: none;
-    color: #155724;
-    font-size: 16px;
-    cursor: pointer;
-    margin-left: 10px;
-}
+
 
 .confirm-button {
     background-color: green;
@@ -665,4 +646,85 @@
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+.notification {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    height: 30px;
+    width: 170px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 1);
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: fadein 0.3s, fadeout 0.3s 2.7s;
+    text-align: center;
+    line-height: 30px;
+}
+
+.notification.success {
+    background-color: rgba(188, 227, 106, 0.6);
+}
+
+.notification.error {
+    background-color:rgba(249, 171, 171, 0.6);
+}
+
+@keyframes fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeout {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+.notification button {
+    background: none;
+    border: none;
+    color: #155724;
+    font-size: 16px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.task-chat-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+.chat-messages {
+    max-height: 80%;
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.chat-message {
+    background-color: #f1f1f1;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 5px;
+}
+.task-chat {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 1000;
 }

@@ -34,7 +34,7 @@ export function Start() {
             <p className="start-description">
               Бесплатный трекер с удобным дизайном <br /> и огромным функционалом.
             </p>
-            <Link to="/account/login"> <button className="start-button"> Приступить к работе </button></Link>
+            <Link to="/account/register"> <button className="start-button"> Приступить к работе </button></Link>
           </div>
         </div>
       </header>

@@ -3,6 +3,8 @@ import TaskCard from './TaskCard';
 import TaskForm from './TaskForm';
 import { ParametersPanel } from 'task_components/ParametersPanel';
 import { FiltersPanel } from 'task_components/FiltersPanel';
+import TaskChat from './TaskChat';
+import TaskView from './TaskView';
 
 function TaskBoard() {
     const [tasks, setTasks] = useState({
@@ -12,30 +14,36 @@ function TaskBoard() {
         revise: [],
         other: []
     });
+    const [isChatOpen, setChatOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null); // Для отображения панели описания
     const [isTaskFormOpen, setTaskFormOpen] = useState(false); // Для открытия формы редактирования
     const [isParametersOpen, setParametersOpen] = useState(false); // Для открытия панели параметров
     const [isFiltersOpen, setFiltersOpen] = useState(false); // Для открытия панели фильтров
 
-
+    const [notification, setNotification] = useState({ message: '', type: '' });
+    const showNotification = (message, type) => {
+        setNotification({ message, type });
+        setTimeout(() => setNotification({ message: '', type: '' }), 2900);
+    };
     // Сохранение новой или отредактированной задачи
     const handleSaveTask = (task) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = { ...prevTasks };
-
-            // Если задача редактируется
-            if (task.id) {
-                for (const key in updatedTasks) {
-                    updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
+        try {
+            setTasks((prevTasks) => {
+                const updatedTasks = { ...prevTasks };
+                if (task.id) {
+                    for (const key in updatedTasks) {
+                        updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
+                    }
+                } else {
+                    task.id = Date.now().toString();
                 }
-            } else {
-                task.id = Date.now().toString();
-            }
-
-            updatedTasks[getStatusKey(task.status)].push(task);
-            return updatedTasks;
-        });
-
+                updatedTasks[getStatusKey(task.status)].push(task);
+                return updatedTasks;
+            });
+            showNotification('Сохранено', 'success');
+        } catch (error) {
+            showNotification('Ошибка. Попробуй еще раз', 'error');
+        }
         setTaskFormOpen(false);
         setSelectedTask(null);
     };
@@ -55,6 +63,7 @@ function TaskBoard() {
         }
     };
     const handleDeleteTask = (taskId) => {
+    try {
         setTasks((prevTasks) => {
             const updatedTasks = { ...prevTasks };
             for (const key in updatedTasks) {
@@ -62,10 +71,13 @@ function TaskBoard() {
             }
             return updatedTasks;
         });
-    
-        setTaskFormOpen(false); // Закрываем форму редактирования
-        setSelectedTask(null);  // Сбрасываем выбранную задачу
-    };
+        showNotification('Задача удалена', 'success');
+    } catch (error) {
+        showNotification('Ошибка. Попробуй еще раз', 'error');
+    }
+    setTaskFormOpen(false);
+    setSelectedTask(null);
+};
     
 
 
@@ -85,6 +97,7 @@ function TaskBoard() {
             let movedTask = null;
 
             for (const key in updatedTasks) {
+                // eslint-disable-next-line no-loop-func
                 updatedTasks[key] = updatedTasks[key].filter((task) => {
                     if (task.id === taskId) {
                         movedTask = { ...task, status: newStatus };
@@ -112,6 +125,30 @@ function TaskBoard() {
         setTaskFormOpen(true); // Открыть форму
     };
 
+    const handleOpenChat = (task) => {
+        console.log('Клик по кнопке чата, задача:', task); // Отладка
+        setSelectedTask(task); // Устанавливаем задачу, к которой привязан чат
+        setChatOpen(true); // Открываем чат
+    };
+    
+
+    const handleAddComment = (taskId, comment) => {
+        setTasks((prevTasks) => {
+            const updatedTasks = { ...prevTasks };
+            for (const key in updatedTasks) {
+                updatedTasks[key] = updatedTasks[key].map((task) => {
+                    if (task.id === taskId) {
+                        return {
+                            ...task,
+                            comments: [...(task.comments || []), comment],
+                        };
+                    }
+                    return task;
+                });
+            }
+            return updatedTasks;
+        });
+    };
     return (
         <div className={`task-board ${isTaskFormOpen ? 'dimmed' : ''}`}>
             {/* Кнопка Параметры */}
@@ -142,6 +179,7 @@ function TaskBoard() {
                                 key={task.id}
                                 task={task}
                                 onClick={() => setSelectedTask(task)} // Открыть панель описания
+                                onChatClick={() => handleOpenChat(task)}
                                 draggable
                                 onDragStart={(event) => handleDragStart(event, task.id)}
                             />
@@ -154,6 +192,7 @@ function TaskBoard() {
 
             {/* Форма редактирования задачи */}
             {isTaskFormOpen && (
+                
                 <TaskForm
                     task={selectedTask}
                     onSave={handleSaveTask}
@@ -164,9 +203,12 @@ function TaskBoard() {
                     }}
                     mode={selectedTask ? 'edit' : 'create'}
                 />
-
             )}
-
+            {notification.message && (
+                <div className={`notification ${notification.type}`}>
+                    {notification.message}
+                </div>
+            )}
             {selectedTask && !isTaskFormOpen && (
                 <TaskForm
                     task={selectedTask}
@@ -189,7 +231,14 @@ function TaskBoard() {
                     mode={selectedTask ? 'edit' : 'create'}
                 />
             )}
-            
+            {isChatOpen && selectedTask && (
+                <TaskChat
+                    task={selectedTask}
+                    onClose={() => setChatOpen(false)}
+                    onAddComment={handleAddComment}
+                />
+            )}
+
             <ParametersPanel isOpen={isParametersOpen} onClose={() => setParametersOpen(false)} />
             <FiltersPanel isOpen={isFiltersOpen} onClose={() => setFiltersOpen(false)} />
         </div>
