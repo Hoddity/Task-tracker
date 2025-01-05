@@ -82,8 +82,8 @@ function Register() {
                             {...register('firstName')}
                             className={`form-control ${errors.firstName ? 'is-invalid' : ''}`}
                         />
-                        <div className="invalid-feedback">{errors.firstName?.message}</div>
-                    </div>
+                        
+                    </div><div className="invalid-feedback">{errors.firstName?.message}</div>
                     <div className="logInput">
                         <input
                             name="lastName"
@@ -92,8 +92,8 @@ function Register() {
                             {...register('lastName')}
                             className={`form-control ${errors.lastName ? 'is-invalid' : ''}`}
                         />
-                        <div className="invalid-feedback">{errors.lastName?.message}</div>
-                    </div>
+                        
+                    </div><div className="invalid-feedback">{errors.lastName?.message}</div>
                     <div className="logInput">
                         <input
                             name="username"
@@ -102,8 +102,8 @@ function Register() {
                             {...register('username')}
                             className={`form-control ${errors.username ? 'is-invalid' : ''}`}
                         />
-                        <div className="invalid-feedback">{errors.username?.message}</div>
-                    </div>
+                        
+                    </div><div className="invalid-feedback">{errors.username?.message}</div>
                     <div className="logInput">
                         <input
                             name="password"
@@ -112,8 +112,8 @@ function Register() {
                             {...register('password')}
                             className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                         />
-                        <div className="invalid-feedback">{errors.password?.message}</div>
-                    </div>
+                        
+                    </div><div className="invalid-feedback">{errors.password?.message}</div>
                     <div className="logInput">
                         <input
                             name="confirmPassword"
@@ -122,8 +122,8 @@ function Register() {
                             {...register('confirmPassword')}
                             className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
                         />
-                        <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
-                    </div>
+                        
+                        </div><div className="invalid-feedback">{errors.confirmPassword?.message}</div>
                     {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
                     {successMessage && <div className="alert alert-success">{successMessage}</div>}
                     <button disabled={isSubmitting || loading} className="btn-primary-reg">

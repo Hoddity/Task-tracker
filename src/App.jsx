@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { history } from '_helpers';
 import {PrivateRoute } from '_components';
 import { AccountLayout } from 'account';
+import { IntegrationLayout } from 'integrations/IntegrationRoute';
 import { Start } from 'start';
 import { TaskProvider } from '_components/TaskContext';
 import TaskBoard from './task/TaskBoard';

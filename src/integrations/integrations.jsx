@@ -1,7 +1,11 @@
 import React from "react";
 import { yg,td,jira } from "img/people";
-
+import { useNavigate } from "react-router-dom";
 export const Integrations = () => {
+  const navigate = useNavigate();
+  const handleGoToTasks = () => {
+    navigate("/tasks");  // Переход к задачам через React Router
+  };
   return (
     <div className="integrations-container">
       <h1 className="int">Интеграции</h1>
@@ -34,8 +38,8 @@ export const Integrations = () => {
           <button>Подключить</button>
         </div>
       </div>
-      <a href="/" className="home-link">
-        <button>На главную</button>
+      <a href="/tasks" className="home-link">
+        <button onClick={handleGoToTasks}>К задачам</button>
       </a>
     </div>
   );
