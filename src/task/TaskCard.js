@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TaskCard = ({ task, onClick, draggable, onDragStart }) => {
+const TaskCard = ({ task, onClick, onChatClick, draggable, onDragStart }) => {
     return (
         <div
             className="task-card"
@@ -10,9 +10,8 @@ const TaskCard = ({ task, onClick, draggable, onDragStart }) => {
         >
             <h3>{task.title}</h3>
             <div className='task-card-info'>
-            
-            <p><img src='src\img\account_circle.png' alt=''></img>{task.team}</p>
-            </div>         
+                <p><img src='src\img\account_circle.png' alt=''></img>{task.team}</p>
+            </div>
         </div>
     );
 };

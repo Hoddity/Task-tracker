@@ -3,7 +3,7 @@ import TaskView from './TaskView';
 import ConfirmDialog from './helpers/ConfirmDialog';
 import useTaskForm from './helpers/useTaskForm';
 
-const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit }) => {
+const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onChatClick }) => {
     const isViewMode = mode === 'view';
     const { formData, handleInputChange } = useTaskForm(task);
     const [isConfirmOpen, setConfirmOpen] = useState(false);
@@ -42,7 +42,11 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit }) =>
 
                 {/* Отображение задачи в режиме просмотра */}
                 {task && isViewMode && (
-                    <TaskView task={task} onEditClick={onEdit} />
+                    <TaskView
+                    task={task}
+                    onEditClick={onEdit}
+                    onChatClick={onChatClick} // Передаем функцию для открытия чата
+                />
                 )}
 
                 <h3>

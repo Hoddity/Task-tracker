@@ -8,18 +8,15 @@ const TaskView = ({ task, onEditClick, onViewClick, draggable, onDragStart, onCh
             onDragStart={onDragStart}
         >
             <h4 className='task-card-view-title'>{task.title}</h4>
+            
             <div className="task-card-buttons">
                 <button onClick={onEditClick} className="card-edit-button">
                 </button>
                 <button onClick={onViewClick} className="card-view-button">
                 </button>
-                <button onClick={() => {
-                    console.log('Кнопка чата нажата для задачи:', task);
-                    onChatClick();
-                }} className="chat-button"></button>
+                <button onClick={() => onChatClick(task)} className="chat-button"></button>
             </div>
         </div>
-
     );
 };
 
