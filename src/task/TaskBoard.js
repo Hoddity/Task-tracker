@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskCard from './TaskCard';
 import TaskForm from './TaskForm';
 import { ParametersPanel } from 'task_components/ParametersPanel';
 import { FiltersPanel } from 'task_components/FiltersPanel';
 import TaskChat from './TaskChat';
 import TaskView from './TaskView';
+import useTaskForm from './helpers/useTaskForm';
 
 function TaskBoard() {
     const [tasks, setTasks] = useState({
@@ -15,29 +16,31 @@ function TaskBoard() {
         other: []
     });
     const [isChatOpen, setChatOpen] = useState(false);
-    const [selectedTask, setSelectedTask] = useState(null); // Для отображения панели описания
-    const [isTaskFormOpen, setTaskFormOpen] = useState(false); // Для открытия формы редактирования
-    const [isParametersOpen, setParametersOpen] = useState(false); // Для открытия панели параметров
-    const [isFiltersOpen, setFiltersOpen] = useState(false); // Для открытия панели фильтров
-
+    const [selectedTask, setSelectedTask] = useState(null);
+    const [isTaskFormOpen, setTaskFormOpen] = useState(false);
+    const [isParametersOpen, setParametersOpen] = useState(false);
+    const [isFiltersOpen, setFiltersOpen] = useState(false);
     const [notification, setNotification] = useState({ message: '', type: '' });
+    const { formData, setFormData, handleInputChange, saveTaskToServer } = useTaskForm(selectedTask);
+
     const showNotification = (message, type) => {
         setNotification({ message, type });
         setTimeout(() => setNotification({ message: '', type: '' }), 2900);
     };
     // Сохранение новой или отредактированной задачи
-    const handleSaveTask = (task) => {
+    const handleSaveTask = async (task) => {
         try {
+            const savedTask = await saveTaskToServer(task);
             setTasks((prevTasks) => {
                 const updatedTasks = { ...prevTasks };
-                if (task.id) {
+                if (savedTask.id) {
                     for (const key in updatedTasks) {
-                        updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
+                        updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== savedTask.id);
                     }
                 } else {
-                    task.id = Date.now().toString();
+                    savedTask.id = Date.now().toString();
                 }
-                updatedTasks[getStatusKey(task.status)].push(task);
+                updatedTasks[getStatusKey(savedTask.status)].push(savedTask);
                 return updatedTasks;
             });
             showNotification('Сохранено', 'success');
@@ -47,7 +50,38 @@ function TaskBoard() {
         setTaskFormOpen(false);
         setSelectedTask(null);
     };
+    useEffect(() => {
+        const accessToken = localStorage.getItem('accessToken'); // Получаем токен из localStorage
 
+const fetchTasks = async () => {
+    try {
+        const response = await fetch('http://127.0.0.1:8000/tasks/', {
+            method: 'GET',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`, // Добавляем токен доступа
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при загрузке задач');
+        }
+
+        const tasksFromServer = await response.json();
+        setTasks({
+            todo: tasksFromServer.filter(task => task.status === 'Нужно сделать'),
+            inProgress: tasksFromServer.filter(task => task.status === 'В работе'),
+            done: tasksFromServer.filter(task => task.status === 'Сделано'),
+            revise: tasksFromServer.filter(task => task.status === 'Доработать'),
+            other: tasksFromServer.filter(task => task.status === 'Другое'),
+        });
+    } catch (error) {
+        console.error('Ошибка:', error);
+    }
+};
+    
+        fetchTasks();
+    }, []);
     const getStatusKey = (status) => {
         switch (status) {
             case 'Нужно сделать':
@@ -152,51 +186,44 @@ function TaskBoard() {
     return (
         <div className={`task-board ${isTaskFormOpen ? 'dimmed' : ''}`}>
             {/* Кнопка Параметры */}
-            <button onClick={() => setParametersOpen(true)} className="parameters-button">
-
-            </button>
+            <button onClick={() => setParametersOpen(true)} className="parameters-button"></button>
 
             {/* Кнопка Фильтры */}
-            <button onClick={() => setFiltersOpen(true)} className="filters-button">
-            </button>
+            <button onClick={() => setFiltersOpen(true)} className="filters-button"></button>
 
             {/* Кнопка добавления задачи */}
-            <button onClick={() => setTaskFormOpen(true)} className="add-task-button">
-            </button>
+            <button onClick={() => setTaskFormOpen(true)} className="add-task-button"></button>
 
             {/* Колонки задач */}
             <div className="task-columns">
                 {['Нужно сделать', 'В работе', 'Сделано', 'Доработать', 'Другое'].map((status) => (
                     <div
-                        key={status}
-                        className="task-column"
-                        onDrop={(event) => handleDrop(event, status)}
-                        onDragOver={handleDragOver}
-                    >
-                        <h3>{status}</h3>
-                        {tasks[getStatusKey(status)].map((task) => (
-                            <TaskCard
-                                key={task.id}
-                                task={task}
-                                onClick={() => setSelectedTask(task)} // Открыть панель описания
-                                onChatClick={() => handleOpenChat(task)}
-                                draggable
-                                onDragStart={(event) => handleDragStart(event, task.id)}
-                            />
+                    key={status}
+                    className="task-column"
+                    onDrop={(event) => handleDrop(event, status)}
+                    onDragOver={handleDragOver}
+                >
+                    <h3>{status}</h3>
+                    {tasks[getStatusKey(status)].map((task) => (
+                        <TaskCard
+                            key={task.id}
+                            task={task}
+                            onClick={() => setSelectedTask(task)}
+                            onChatClick={() => handleOpenChat(task)}
+                            draggable
+                            onDragStart={(event) => handleDragStart(event, task.id)}
+                        />
                         ))}
                     </div>
                 ))}
             </div>
 
-
-
             {/* Форма редактирования задачи */}
             {isTaskFormOpen && (
-                
                 <TaskForm
                     task={selectedTask}
                     onSave={handleSaveTask}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onDelete={handleDeleteTask}
                     onClose={() => {
                         setTaskFormOpen(false);
                         setSelectedTask(null);
@@ -213,24 +240,12 @@ function TaskBoard() {
                 <TaskForm
                     task={selectedTask}
                     onClose={() => setSelectedTask(null)}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
+                    onDelete={handleDeleteTask}
                     onEdit={handleEditTask}
                     mode="view"
                 />
             )}
 
-            {isTaskFormOpen && (
-                <TaskForm
-                    task={selectedTask}
-                    onSave={handleSaveTask}
-                    onDelete={handleDeleteTask} // Передаем функцию удаления
-                    onClose={() => {
-                        setTaskFormOpen(false);
-                        setSelectedTask(null);
-                    }}
-                    mode={selectedTask ? 'edit' : 'create'}
-                />
-            )}
             {isChatOpen && selectedTask && (
                 <TaskChat
                     task={selectedTask}
