@@ -9,8 +9,8 @@ const TaskView = ({ task, onEditClick, onViewClick, draggable, onDragStart, onCh
         >
             <h4 className='task-card-view-title'>{task.title}</h4>
             <div className="task-card-buttons">
-                <button onClick={onEditClick} className="card-edit-button">
-                </button>
+            <button onClick={onEditClick} className="card-edit-button">
+            </button>
                 <button onClick={onViewClick} className="card-view-button">
                 </button>
                 <button onClick={() => onChatClick(task)} className="chat-button"></button>

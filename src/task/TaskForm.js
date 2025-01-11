@@ -44,10 +44,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onCha
                 {task && isViewMode && (
                     <TaskView
                         task={task}
-                        onEditClick={() => {
-                            onEdit(); // Переход в режим редактирования
-                            onClose(); // Закрытие чата
-                        }}
+                        onEditClick={onEdit}
                         onViewClick={onClose} // Закрытие чата при нажатии на просмотр
                         onChatClick={onChatClick}
                     />
