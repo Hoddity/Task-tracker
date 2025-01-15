@@ -3,22 +3,63 @@ import TaskView from './TaskView';
 import ConfirmDialog from './helpers/ConfirmDialog';
 import useTaskForm from './helpers/useTaskForm';
 
-const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onChatClick }) => {
+const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onChatClick }) => {
     const isViewMode = mode === 'view';
     const { formData, handleInputChange } = useTaskForm(task);
     const [isConfirmOpen, setConfirmOpen] = useState(false);
-    const [isSaved, setIsSaved] = useState(false); // Новое состояние для уведомления
+    const [isSaved, setIsSaved] = useState(false);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        onSave({
-            ...task,
-            ...formData,
-            id: task?.id || Date.now().toString(),
-        });
-        setIsSaved(true); // Показать уведомление "Сохранено"
-        setTimeout(() => setIsSaved(false), 3000); // Скрыть уведомление через 3 секунды
-        onClose();
+        const accessToken = localStorage.getItem('accessToken');
+    
+        if (!accessToken) {
+            console.error('Токен доступа отсутствует');
+            return;
+        }
+    
+        // Формируем данные для отправки
+        const taskData = {
+            title: formData.title,
+            description: formData.description,
+            date_end: formData.deadline,
+            is_complete: formData.status === 'Сделано',
+            status: formData.status,
+            priority: formData.priority,
+        };
+    
+        // Добавляем команду только если она заполнена
+        if (formData.team) {
+            taskData.command = parseInt(formData.team);
+        }
+    
+        console.log('Отправляемые данные:', taskData);
+    
+        try {
+            const response = await fetch('http://127.0.0.1:8000/tasks/', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(taskData),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json(); // Получаем детали ошибки от сервера
+                console.error('Ошибка сервера:', errorData);
+                throw new Error('Ошибка при создании задачи');
+            }
+    
+            const createdTask = await response.json();
+            onSave(createdTask); // Обновляем состояние в TaskBoard
+            setIsSaved(true);
+            setTimeout(() => setIsSaved(false), 3000);
+            onClose();
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     };
 
     const confirmDelete = () => {
@@ -32,7 +73,6 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onCha
             <div className="task-form-sidebar">
                 <button className="close-button" onClick={onClose}>✖</button>
 
-                {/* Уведомление о сохранении */}
                 {isSaved && (
                     <div className="notification">
                         <span> Сохранено</span>
@@ -40,12 +80,11 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onCha
                     </div>
                 )}
 
-                {/* Отображение задачи в режиме просмотра */}
                 {task && isViewMode && (
                     <TaskView
                         task={task}
                         onEditClick={onEdit}
-                        onViewClick={onClose} // Закрытие чата при нажатии на просмотр
+                        onViewClick={onClose}
                         onChatClick={onChatClick}
                     />
                 )}
@@ -140,7 +179,6 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onCha
                         />
                     )}
 
-                    {/* Логика отображения кнопок */}
                     {isViewMode ? null : task ? (
                         <div className="button-group">
                             <button
@@ -155,7 +193,6 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit,onCha
                 </form>
             </div>
 
-            {/* Модальное окно подтверждения удаления */}
             <ConfirmDialog
                 isOpen={isConfirmOpen}
                 onConfirm={confirmDelete}

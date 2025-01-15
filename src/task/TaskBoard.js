@@ -20,28 +20,39 @@ function TaskBoard() {
     const [isParametersOpen, setParametersOpen] = useState(false);
     const [isFiltersOpen, setFiltersOpen] = useState(false);
     const [notification, setNotification] = useState({ message: '', type: '' });
-    const { formData, setFormData, handleInputChange, saveTaskToServer } = useTaskForm(selectedTask);
+
     const [isChatOpen, setChatOpen] = useState(false);
     const [selectedTaskForChat, setSelectedTaskForChat] = useState(null);
     const showNotification = (message, type) => {
         setNotification({ message, type });
         setTimeout(() => setNotification({ message: '', type: '' }), 2900);
     };
-
-    const handleSaveTask = (task) => {
+    useTaskForm(selectedTask);
+    const handleSaveTask = async (task) => {
         try {
+            const accessToken = localStorage.getItem('accessToken');
+    
+            const response = await fetch('http://127.0.0.1:8000/tasks/', {
+                method: 'POST',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(task),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Ошибка при создании задачи');
+            }
+    
+            const createdTask = await response.json();
             setTasks((prevTasks) => {
                 const updatedTasks = { ...prevTasks };
-                if (task.id) {
-                    for (const key in updatedTasks) {
-                        updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== task.id);
-                    }
-                } else {
-                    task.id = Date.now().toString();
-                }
-                updatedTasks[getStatusKey(task.status)].push(task);
+                updatedTasks[getStatusKey(createdTask.status)].push(createdTask);
                 return updatedTasks;
             });
+    
             showNotification('Сохранено', 'success');
         } catch (error) {
             showNotification('Ошибка. Попробуй еще раз', 'error');
