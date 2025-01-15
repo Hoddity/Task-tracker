@@ -23,15 +23,14 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
             title: formData.title,
             description: formData.description,
             date_end: formData.deadline,
+            command: formData.team ? parseInt(formData.team) : null, // Если команда не указана, передаем null
             is_complete: formData.status === 'Сделано',
             status: formData.status,
             priority: formData.priority,
         };
     
-        // Добавляем команду только если она заполнена
-        if (formData.team) {
-            taskData.command = parseInt(formData.team);
-        }
+        const body = JSON.stringify(taskData);
+        const contentLength = body.length; // Вычисляем длину тела запроса
     
         console.log('Отправляемые данные:', taskData);
     
@@ -42,8 +41,9 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
                     'accept': 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`,
+                    'Content-Length': contentLength.toString(), // Добавляем заголовок Content-Length
                 },
-                body: JSON.stringify(taskData),
+                body: body,
             });
     
             if (!response.ok) {

@@ -31,34 +31,64 @@ function TaskBoard() {
     const handleSaveTask = async (task) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-    
+
             const response = await fetch('http://127.0.0.1:8000/tasks/', {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'application/json',
+
                     'Authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(task),
             });
-    
+
             if (!response.ok) {
                 throw new Error('Ошибка при создании задачи');
             }
-    
+
             const createdTask = await response.json();
             setTasks((prevTasks) => {
                 const updatedTasks = { ...prevTasks };
                 updatedTasks[getStatusKey(createdTask.status)].push(createdTask);
                 return updatedTasks;
             });
-    
+
             showNotification('Сохранено', 'success');
         } catch (error) {
             showNotification('Ошибка. Попробуй еще раз', 'error');
         }
         setTaskFormOpen(false);
         setSelectedTask(null);
+    };
+
+    const updateTaskStatusOnServer = async (taskId, newStatus) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            console.log('Updating task with ID:', taskId); // Логируем taskId
+            const response = await fetch(`http://127.0.0.1:8000/tasks/${taskId}/`, {
+                method: 'PATCH',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({ status: newStatus }),
+            });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Ошибка сервера:', errorData);
+                throw new Error('Ошибка при обновлении статуса задачи');
+            }
+    
+            const updatedTask = await response.json();
+            console.log('Обновленная задача с сервера:', updatedTask); // Логируем ответ сервера
+            return updatedTask;
+        } catch (error) {
+            console.error('Ошибка:', error);
+            throw error;
+        }
     };
 
     useEffect(() => {
@@ -127,41 +157,57 @@ function TaskBoard() {
     };
 
     const handleDragStart = (event, taskId) => {
-        event.dataTransfer.setData('taskId', taskId);
+        event.dataTransfer.setData('taskId', taskId.toString()); // Убедитесь, что taskId передается как строка
+        console.log('Drag started with task ID:', taskId); // Логируем taskId
     };
-
+    
     const handleDrop = (event, newStatus) => {
         event.preventDefault();
-        const taskId = event.dataTransfer.getData('taskId');
-        updateTaskStatus(taskId, newStatus);
+        const taskId = event.dataTransfer.getData('taskId'); // Получаем taskId
+        console.log('Task ID from drop:', taskId); // Логируем taskId
+        if (taskId) {
+            updateTaskStatus(parseInt(taskId, 10), newStatus); // Преобразуем taskId в число
+        } else {
+            console.error('Task ID is undefined');
+        }
     };
-
-    const updateTaskStatus = (taskId, newStatus) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = { ...prevTasks };
-            let movedTask = null;
-
-            for (const key in updatedTasks) {
-                updatedTasks[key] = updatedTasks[key].filter((task) => {
-                    if (task.id === taskId) {
-                        movedTask = { ...task, status: newStatus };
-                        return false;
-                    }
-                    return true;
-                });
-            }
-
-            if (movedTask) {
-                updatedTasks[getStatusKey(newStatus)].push(movedTask);
-            }
-
-            return updatedTasks;
-        });
-    };
-
+    
     const handleDragOver = (event) => {
         event.preventDefault();
     };
+
+    const updateTaskStatus = async (taskId, newStatus) => {
+        try {
+            // Обновляем статус задачи на сервере
+            const updatedTask = await updateTaskStatusOnServer(taskId, newStatus);
+    
+            // Обновляем локальное состояние
+            setTasks((prevTasks) => {
+                // Создаем копию предыдущего состояния
+                const updatedTasks = { ...prevTasks };
+    
+                // Удаляем задачу из всех колонок
+                for (const key in updatedTasks) {
+                    updatedTasks[key] = updatedTasks[key].filter((task) => task.id !== taskId);
+                }
+    
+                // Добавляем задачу в новую колонку с обновленным статусом
+                updatedTasks[getStatusKey(newStatus)] = [
+                    ...updatedTasks[getStatusKey(newStatus)],
+                    updatedTask,
+                ];
+    
+                console.log('Обновленное состояние задач:', updatedTasks); // Логируем состояние
+                return updatedTasks;
+            });
+    
+            showNotification('Статус задачи обновлен', 'success');
+        } catch (error) {
+            showNotification('Ошибка при обновлении статуса задачи', 'error');
+        }
+    };
+
+
     const [formMode, setFormMode] = useState('view'); // view | edit | create
 
     const handleEditTask = () => {
@@ -178,7 +224,7 @@ function TaskBoard() {
         setSelectedTaskForChat(null);
     };
 
-    const handleAddComment = (taskId, comment,timestamp) => {
+    const handleAddComment = (taskId, comment, timestamp) => {
         setTasks((prevTasks) => {
             const updatedTasks = { ...prevTasks };
             for (const key in updatedTasks) {
@@ -252,15 +298,15 @@ function TaskBoard() {
                 </div>
             )}
             {selectedTask && !isTaskFormOpen && (
-            <TaskForm
-                task={selectedTask}
-                onClose={() => setSelectedTask(null)}
-                onDelete={handleDeleteTask}
-                onEdit={handleEditTask}
-                onChatClick={() => handleOpenChat(selectedTask)} // Передаем функцию для открытия чата
-                mode="view"
-            />
-        )}
+                <TaskForm
+                    task={selectedTask}
+                    onClose={() => setSelectedTask(null)}
+                    onDelete={handleDeleteTask}
+                    onEdit={handleEditTask}
+                    onChatClick={() => handleOpenChat(selectedTask)} // Передаем функцию для открытия чата
+                    mode="view"
+                />
+            )}
 
             {isChatOpen && selectedTaskForChat && (
                 <TaskChat
