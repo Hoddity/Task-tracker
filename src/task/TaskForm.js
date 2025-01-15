@@ -3,57 +3,37 @@ import TaskView from './TaskView';
 import ConfirmDialog from './helpers/ConfirmDialog';
 import useTaskForm from './helpers/useTaskForm';
 
+// Компонент TaskForm для создания, редактирования и просмотра задач
 const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onChatClick }) => {
+    // Определяем, находится ли форма в режиме просмотра
     const isViewMode = mode === 'view';
+
+    // Хук для управления состоянием формы
     const { formData, handleInputChange } = useTaskForm(task);
+
+    // Состояния для управления подтверждением удаления и уведомлением о сохранении
     const [isConfirmOpen, setConfirmOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
 
+    // Функция для отправки формы
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const accessToken = localStorage.getItem('accessToken');
+        console.log('Form submitted');
     
-        if (!accessToken) {
-            console.error('Токен доступа отсутствует');
-            return;
-        }
-    
-        // Формируем данные для отправки
         const taskData = {
             title: formData.title,
             description: formData.description,
             date_end: formData.deadline,
-            command: formData.team ? parseInt(formData.team) : null, // Если команда не указана, передаем null
+            command: formData.team ? parseInt(formData.team) : null,
             is_complete: formData.status === 'Сделано',
             status: formData.status,
             priority: formData.priority,
         };
     
-        const body = JSON.stringify(taskData);
-        const contentLength = body.length; // Вычисляем длину тела запроса
-    
         console.log('Отправляемые данные:', taskData);
     
         try {
-            const response = await fetch('http://127.0.0.1:8000/tasks/', {
-                method: 'POST',
-                headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Length': contentLength.toString(), // Добавляем заголовок Content-Length
-                },
-                body: body,
-            });
-    
-            if (!response.ok) {
-                const errorData = await response.json(); // Получаем детали ошибки от сервера
-                console.error('Ошибка сервера:', errorData);
-                throw new Error('Ошибка при создании задачи');
-            }
-    
-            const createdTask = await response.json();
-            onSave(createdTask); // Обновляем состояние в TaskBoard
+            onSave(taskData); // Передаем данные задачи в TaskBoard
             setIsSaved(true);
             setTimeout(() => setIsSaved(false), 3000);
             onClose();
@@ -62,6 +42,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
         }
     };
 
+    // Функция для подтверждения удаления задачи
     const confirmDelete = () => {
         if (onDelete && task?.id) onDelete(task.id);
         setConfirmOpen(false);

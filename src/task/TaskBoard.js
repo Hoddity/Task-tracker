@@ -4,10 +4,11 @@ import TaskForm from './TaskForm';
 import { ParametersPanel } from 'task_components/ParametersPanel';
 import { FiltersPanel } from 'task_components/FiltersPanel';
 import TaskChat from './TaskChat';
-import TaskView from './TaskView';
 import useTaskForm from './helpers/useTaskForm';
 
+// Основной компонент TaskBoard, который управляет задачами и их отображением
 function TaskBoard() {
+    // Состояние для хранения задач, разделенных по статусам
     const [tasks, setTasks] = useState({
         todo: [],
         inProgress: [],
@@ -15,45 +16,67 @@ function TaskBoard() {
         revise: [],
         other: []
     });
+
+    // Состояние для выбранной задачи
     const [selectedTask, setSelectedTask] = useState(null);
+
+    // Состояния для управления открытием/закрытием форм и панелей
     const [isTaskFormOpen, setTaskFormOpen] = useState(false);
     const [isParametersOpen, setParametersOpen] = useState(false);
     const [isFiltersOpen, setFiltersOpen] = useState(false);
+
+    // Состояние для уведомлений
     const [notification, setNotification] = useState({ message: '', type: '' });
 
+    // Состояния для управления чатом
     const [isChatOpen, setChatOpen] = useState(false);
     const [selectedTaskForChat, setSelectedTaskForChat] = useState(null);
+
+    // Функция для отображения уведомлений
     const showNotification = (message, type) => {
         setNotification({ message, type });
         setTimeout(() => setNotification({ message: '', type: '' }), 2900);
     };
+
+    // Хук для управления формой задачи
     useTaskForm(selectedTask);
+
+    // Функция для сохранения задачи на сервере
     const handleSaveTask = async (task) => {
+        console.log('Saving task:', task);
         try {
             const accessToken = localStorage.getItem('accessToken');
-
+    
             const response = await fetch('http://127.0.0.1:8000/tasks/', {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
                     'Content-Type': 'application/json',
-
                     'Authorization': `Bearer ${accessToken}`,
                 },
                 body: JSON.stringify(task),
             });
-
+    
             if (!response.ok) {
                 throw new Error('Ошибка при создании задачи');
             }
-
+    
             const createdTask = await response.json();
+            console.log('Созданная задача:', createdTask);
+    
+            // Обновляем локальное состояние задач
             setTasks((prevTasks) => {
                 const updatedTasks = { ...prevTasks };
-                updatedTasks[getStatusKey(createdTask.status)].push(createdTask);
+                const statusKey = getStatusKey(createdTask.status);
+    
+                // Проверяем, что задача еще не добавлена
+                if (!updatedTasks[statusKey].some(t => t.id === createdTask.id)) {
+                    updatedTasks[statusKey] = [...updatedTasks[statusKey], createdTask];
+                }
+    
                 return updatedTasks;
             });
-
+    
             showNotification('Сохранено', 'success');
         } catch (error) {
             showNotification('Ошибка. Попробуй еще раз', 'error');
@@ -61,7 +84,7 @@ function TaskBoard() {
         setTaskFormOpen(false);
         setSelectedTask(null);
     };
-
+    // Функция для обновления статуса задачи на сервере
     const updateTaskStatusOnServer = async (taskId, newStatus) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
@@ -75,13 +98,13 @@ function TaskBoard() {
                 },
                 body: JSON.stringify({ status: newStatus }),
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Ошибка сервера:', errorData);
                 throw new Error('Ошибка при обновлении статуса задачи');
             }
-    
+
             const updatedTask = await response.json();
             console.log('Обновленная задача с сервера:', updatedTask); // Логируем ответ сервера
             return updatedTask;
@@ -91,9 +114,11 @@ function TaskBoard() {
         }
     };
 
+    // Эффект для загрузки задач с сервера при монтировании компонента
     useEffect(() => {
+        console.log('Fetching tasks...');
         const accessToken = localStorage.getItem('accessToken');
-
+    
         const fetchTasks = async () => {
             try {
                 const response = await fetch('http://127.0.0.1:8000/tasks/', {
@@ -103,12 +128,14 @@ function TaskBoard() {
                         'Authorization': `Bearer ${accessToken}`,
                     },
                 });
-
+    
                 if (!response.ok) {
                     throw new Error('Ошибка при загрузке задач');
                 }
-
+    
                 const tasksFromServer = await response.json();
+                console.log('Tasks from server:', tasksFromServer);
+    
                 setTasks({
                     todo: tasksFromServer.filter(task => task.status === 'Нужно сделать'),
                     inProgress: tasksFromServer.filter(task => task.status === 'В работе'),
@@ -120,10 +147,11 @@ function TaskBoard() {
                 console.error('Ошибка:', error);
             }
         };
-
+    
         fetchTasks();
-    }, []);
+    }, []); // Зависимости пусты, чтобы фетчинг выполнялся только при монтировании компонента
 
+    // Функция для получения ключа статуса задачи
     const getStatusKey = (status) => {
         switch (status) {
             case 'Нужно сделать':
@@ -139,6 +167,7 @@ function TaskBoard() {
         }
     };
 
+    // Функция для удаления задачи
     const handleDeleteTask = (taskId) => {
         try {
             setTasks((prevTasks) => {
@@ -156,11 +185,12 @@ function TaskBoard() {
         setSelectedTask(null);
     };
 
+    // Функции для обработки событий drag and drop
     const handleDragStart = (event, taskId) => {
         event.dataTransfer.setData('taskId', taskId.toString()); // Убедитесь, что taskId передается как строка
         console.log('Drag started with task ID:', taskId); // Логируем taskId
     };
-    
+
     const handleDrop = (event, newStatus) => {
         event.preventDefault();
         const taskId = event.dataTransfer.getData('taskId'); // Получаем taskId
@@ -171,64 +201,62 @@ function TaskBoard() {
             console.error('Task ID is undefined');
         }
     };
-    
+
     const handleDragOver = (event) => {
         event.preventDefault();
     };
 
+    // Функция для обновления статуса задачи
     const updateTaskStatus = async (taskId, newStatus) => {
         try {
             // Обновляем статус задачи на сервере
             const updatedTask = await updateTaskStatusOnServer(taskId, newStatus);
-    
+
             // Обновляем локальное состояние
             setTasks((prevTasks) => {
-                // Создаем копию предыдущего состояния
                 const updatedTasks = { ...prevTasks };
-    
-                // Удаляем задачу из всех колонок
                 for (const key in updatedTasks) {
                     updatedTasks[key] = updatedTasks[key].filter((task) => task.id !== taskId);
                 }
-    
-                // Добавляем задачу в новую колонку с обновленным статусом
                 updatedTasks[getStatusKey(newStatus)] = [
                     ...updatedTasks[getStatusKey(newStatus)],
                     updatedTask,
                 ];
-    
                 console.log('Обновленное состояние задач:', updatedTasks); // Логируем состояние
                 return updatedTasks;
             });
-    
+
             showNotification('Статус задачи обновлен', 'success');
         } catch (error) {
             showNotification('Ошибка при обновлении статуса задачи', 'error');
         }
     };
 
+    // Состояние для режима формы (просмотр, редактирование, создание)
+    const [formMode, setFormMode] = useState('view');
 
-    const [formMode, setFormMode] = useState('view'); // view | edit | create
-
+    // Функция для перехода в режим редактирования задачи
     const handleEditTask = () => {
         setFormMode('edit');
         setTaskFormOpen(true);
     };
 
+    // Функции для управления чатом
     const handleOpenChat = (task) => {
         setSelectedTaskForChat(task);
         setChatOpen(true);
     };
+
     const handleCloseChat = () => {
         setChatOpen(false);
         setSelectedTaskForChat(null);
     };
 
+    // Функция для добавления комментария к задаче
     const handleAddComment = (taskId, comment, timestamp) => {
         setTasks((prevTasks) => {
             const updatedTasks = { ...prevTasks };
             for (const key in updatedTasks) {
-                // eslint-disable-next-line no-loop-func
                 updatedTasks[key] = updatedTasks[key].map((task) => {
                     if (task.id === taskId) {
                         return {
