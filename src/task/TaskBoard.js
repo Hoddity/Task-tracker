@@ -168,22 +168,40 @@ function TaskBoard() {
     };
 
     // Функция для удаления задачи
-    const handleDeleteTask = (taskId) => {
-        try {
-            setTasks((prevTasks) => {
-                const updatedTasks = { ...prevTasks };
-                for (const key in updatedTasks) {
-                    updatedTasks[key] = updatedTasks[key].filter((task) => task.id !== taskId);
-                }
-                return updatedTasks;
-            });
-            showNotification('Задача удалена', 'success');
-        } catch (error) {
-            showNotification('Ошибка. Попробуй еще раз', 'error');
+    // Функция для удаления задачи
+const handleDeleteTask = async (taskId) => {
+    try {
+        const accessToken = localStorage.getItem('accessToken');
+
+        // Вызов API для удаления задачи на сервере
+        const response = await fetch(`http://127.0.0.1:8000/tasks/${taskId}/`, {
+            method: 'DELETE',
+            headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при удалении задачи');
         }
-        setTaskFormOpen(false);
-        setSelectedTask(null);
-    };
+
+        // Обновляем локальное состояние
+        setTasks((prevTasks) => {
+            const updatedTasks = { ...prevTasks };
+            for (const key in updatedTasks) {
+                updatedTasks[key] = updatedTasks[key].filter((task) => task.id !== taskId);
+            }
+            return updatedTasks;
+        });
+
+        showNotification('Задача удалена', 'success');
+    } catch (error) {
+        showNotification('Ошибка. Попробуй еще раз', 'error');
+    }
+    setTaskFormOpen(false);
+    setSelectedTask(null);
+};
 
     // Функции для обработки событий drag and drop
     const handleDragStart = (event, taskId) => {
