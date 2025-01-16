@@ -3,41 +3,34 @@ import TaskView from './TaskView';
 import ConfirmDialog from './helpers/ConfirmDialog';
 import useTaskForm from './helpers/useTaskForm';
 
-// Компонент TaskForm для создания, редактирования и просмотра задач
 const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onChatClick }) => {
-    // Определяем, находится ли форма в режиме просмотра
     const isViewMode = mode === 'view';
-
-    // Хук для управления состоянием формы
     const { formData, handleInputChange } = useTaskForm(task);
-
-    // Состояния для управления подтверждением удаления и уведомлением о сохранении
     const [isConfirmOpen, setConfirmOpen] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
 
-    // Функция для отправки формы
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log('Form submitted');
-    
+
         const taskData = {
             title: formData.title,
             description: formData.description,
             date_end: formData.deadline || null,
-            command: formData.team || '',  // Убедитесь, что команда передается
+            command: formData.team || '',
             is_complete: formData.status === 'Сделано',
             status: formData.status,
             priority: formData.priority,
         };
-    
+
         if (task && mode === 'edit') {
-            taskData.id = task.id;  // Добавляем ID задачи для обновления
+            taskData.id = task.id;
         }
-    
+
         console.log('Отправляемые данные:', taskData);
-    
+
         try {
-            onSave(taskData);  // Передаем данные задачи в TaskBoard
+            onSave(taskData);
             setIsSaved(true);
             setTimeout(() => setIsSaved(false), 3000);
             onClose();
@@ -45,7 +38,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
             console.error('Ошибка:', error);
         }
     };
-    // Функция для подтверждения удаления задачи
+
     const confirmDelete = () => {
         if (onDelete && task?.id) onDelete(task.id);
         setConfirmOpen(false);
@@ -84,7 +77,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
                 <form onSubmit={!isViewMode ? handleSubmit : undefined}>
                     <label>Заголовок<span className="red-star">*</span></label>
                     {isViewMode ? (
-                        <p>{formData.title}</p>
+                        <p className="task-title">{formData.title}</p>
                     ) : (
                         <input
                             type="text"
@@ -97,7 +90,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
 
                     <label>Описание</label>
                     {isViewMode ? (
-                        <p>{formData.description || 'Нет описания'}</p>
+                        <p className="task-description">{formData.description || 'Нет описания'}</p>
                     ) : (
                         <textarea
                             name="description"

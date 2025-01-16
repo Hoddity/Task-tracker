@@ -451,11 +451,16 @@
 .task-form-sidebar p {
     margin-bottom: 20px;
     text-align: left;
-    background-color:#D9D9D9;
+    background-color: #D9D9D9;
     background-size: 200px;
-    height: 35px;
+    padding: 5px; /* Добавляем отступы внутри серого фона */
     font-size: 22px;
     border-radius: 10px;
+    word-wrap: break-word; /* Перенос текста на новую строку */
+    white-space: normal; /* Разрешаем перенос текста */
+    min-height: 8px; /* Минимальная высота для серого фона */
+    display: flex;
+    align-items: center; /* Выравниваем текст по центру по вертикали */
 }
 
 .task-form-sidebar label {
@@ -487,7 +492,7 @@
 .task-form-sidebar textarea {
     height: 45px;
     
-    resize: none;
+    resize: vertical;
 }
 
 .task-form-sidebar .submit-button {
@@ -690,7 +695,15 @@
     cursor: pointer;
     margin-left: 10px;
 }
+.task-title {
+    word-wrap: break-word; /* Перенос текста на новую строку */
+    white-space: normal; /* Разрешаем перенос текста */
+}
 
+.task-description {
+    word-wrap: break-word; /* Перенос текста на новую строку */
+    white-space: normal; /* Разрешаем перенос текста */
+}
 .task-chat-sidebar {
     position: fixed;
     right: 0;
