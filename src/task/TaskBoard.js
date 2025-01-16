@@ -271,20 +271,25 @@ const handleDeleteTask = async (taskId) => {
 
     // Функция для перехода в режим редактирования задачи
     const handleEditTask = () => {
-        setFormMode('edit');
+        setFormMode('edit'); // Использование функции setFormMode
         setTaskFormOpen(true);
     };
 
-    // Функции для управления чатом
-    const handleOpenChat = (task) => {
-        setSelectedTaskForChat(task);
-        setChatOpen(true);
-    };
 
-    const handleCloseChat = () => {
-        setChatOpen(false);
-        setSelectedTaskForChat(null);
-    };
+// Функция для открытия чата
+const handleOpenChat = (task) => {
+    setSelectedTaskForChat(task);
+    setChatOpen(true);
+    setTaskFormOpen(false); // Закрываем форму задачи при открытии чата
+};
+
+// Функция для закрытия чата
+const handleCloseChat = () => {
+    setChatOpen(false);
+    setSelectedTaskForChat(null);
+};
+
+
     const handleUpdateTask = async (task) => {
         console.log('Updating task:', task);
         try {
@@ -331,29 +336,41 @@ const handleDeleteTask = async (taskId) => {
         setSelectedTask(null);
     };
     // Функция для добавления комментария к задаче
-    const handleAddComment = (taskId, comment, timestamp) => {
-        setTasks((prevTasks) => {
-            const updatedTasks = { ...prevTasks };
-            for (const key in updatedTasks) {
-                updatedTasks[key] = updatedTasks[key].map((task) => {
-                    if (task.id === taskId) {
-                        return {
-                            ...task,
-                            comments: [
-                                ...(task.comments || []),
-                                {
-                                    text: comment,
-                                    author: 'User', // Имя автора (можно заменить на динамическое)
-                                    date: timestamp, // Временная метка
-                                },
-                            ],
-                        };
-                    }
-                    return task;
-                });
+    const handleAddComment = async (taskId, comment) => {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const response = await fetch(`http://127.0.0.1:8000/tasks/${taskId}/comments/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({ text: comment }),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Ошибка при добавлении комментария');
             }
-            return updatedTasks;
-        });
+    
+            const addedComment = await response.json();
+            setTasks((prevTasks) => {
+                const updatedTasks = { ...prevTasks };
+                for (const key in updatedTasks) {
+                    updatedTasks[key] = updatedTasks[key].map((task) => {
+                        if (task.id === taskId) {
+                            return {
+                                ...task,
+                                comments: [...(task.comments || []), addedComment],
+                            };
+                        }
+                        return task;
+                    });
+                }
+                return updatedTasks;
+            });
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
     };
 
     return (

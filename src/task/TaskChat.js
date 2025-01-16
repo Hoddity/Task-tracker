@@ -1,29 +1,63 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const TaskChat = ({ task, onClose, onAddComment }) => {
+const TaskChat = ({ task, onClose }) => {
     const [newComment, setNewComment] = useState('');
-    const [comments, setComments] = useState(task.comments || []); // Локальное состояние для комментариев
+    const [comments, setComments] = useState([]);
 
-    const handleAddComment = () => {
-        if (newComment.trim()) {
-            const timestamp = new Date().toLocaleString(); // Получаем текущее время
-            const commentWithTimestamp = {
-                text: newComment,
-                author: 'User', // Имя автора (можно заменить на динамическое)
-                date: timestamp, // Временная метка
-            };
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const accessToken = localStorage.getItem('accessToken'); // Получаем токен из localStorage
+                const response = await fetch(`http://127.0.0.1:8000/tasks/${task.id}/comments/`, {
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`, // Добавляем токен в заголовки
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Ошибка при загрузке комментариев');
+                }
+                const data = await response.json();
+                setComments(data);
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        };
+    
+        fetchComments();
+    }, [task.id]);
 
-            const updatedComments = [...comments, commentWithTimestamp]; // Добавляем новый комментарий с временем
-            setComments(updatedComments); // Обновляем локальное состояние
-            onAddComment(task.id, newComment, timestamp); // Передаем комментарий и время в родительский компонент
-            setNewComment(''); // Очищаем поле ввода
+    const handleAddComment = async () => {
+    if (newComment.trim()) {
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+            const response = await fetch(`http://127.0.0.1:8000/tasks/${task.id}/comments/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    task: task.id, // Добавляем ID задачи
+                    text: newComment, // Текст комментария
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при добавлении комментария');
+            }
+
+            const addedComment = await response.json();
+            setComments([...comments, addedComment]);
+            setNewComment('');
+        } catch (error) {
+            console.error('Ошибка:', error);
         }
-    };
+    }
+};
 
-    // Обработчик нажатия клавиши
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            handleAddComment(); // Отправляем сообщение при нажатии на Enter
+            handleAddComment();
         }
     };
 
@@ -34,11 +68,11 @@ const TaskChat = ({ task, onClose, onAddComment }) => {
             </div>
 
             <div className="chat-messages">
-                {comments.map((comment, index) => (
-                    <div key={index} className="chat-message">
+                {comments.map((comment) => (
+                    <div key={comment.id} className="chat-message">
                         <div className="message-header">
                             <span className="message-author">{comment.author}</span>
-                            <span className="message-date">{comment.date}</span>
+                            <span className="message-date">{new Date(comment.created_at).toLocaleString()}</span>
                         </div>
                         <p className="message-text">{comment.text}</p>
                     </div>
@@ -50,7 +84,7 @@ const TaskChat = ({ task, onClose, onAddComment }) => {
                     type="text"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    onKeyDown={handleKeyDown} // Обработчик нажатия клавиши
+                    onKeyDown={handleKeyDown}
                     placeholder="Добавить комментарий..."
                 />
                 <button onClick={handleAddComment} className='send'></button>
