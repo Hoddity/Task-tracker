@@ -88,7 +88,23 @@ function TaskBoard() {
     const updateTaskStatusOnServer = async (taskId, newStatus) => {
         try {
             const accessToken = localStorage.getItem('accessToken');
-            console.log('Updating task with ID:', taskId); // Логируем taskId
+            console.log('Updating task with ID:', taskId);
+    
+            // Получаем текущую задачу из состояния
+            const currentTask = Object.values(tasks)
+                .flat()
+                .find((task) => task.id === taskId);
+    
+            if (!currentTask) {
+                throw new Error('Задача не найдена');
+            }
+    
+            // Обновляем только статус, сохраняя остальные поля
+            const updatedTaskData = {
+                ...currentTask,
+                status: newStatus,
+            };
+    
             const response = await fetch(`http://127.0.0.1:8000/tasks/${taskId}/`, {
                 method: 'PATCH',
                 headers: {
@@ -96,17 +112,17 @@ function TaskBoard() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${accessToken}`,
                 },
-                body: JSON.stringify({ status: newStatus }),
+                body: JSON.stringify(updatedTaskData),
             });
-
+    
             if (!response.ok) {
                 const errorData = await response.json();
                 console.error('Ошибка сервера:', errorData);
                 throw new Error('Ошибка при обновлении статуса задачи');
             }
-
+    
             const updatedTask = await response.json();
-            console.log('Обновленная задача с сервера:', updatedTask); // Логируем ответ сервера
+            console.log('Обновленная задача с сервера:', updatedTask);
             return updatedTask;
         } catch (error) {
             console.error('Ошибка:', error);
@@ -269,7 +285,51 @@ const handleDeleteTask = async (taskId) => {
         setChatOpen(false);
         setSelectedTaskForChat(null);
     };
-
+    const handleUpdateTask = async (task) => {
+        console.log('Updating task:', task);
+        try {
+            const accessToken = localStorage.getItem('accessToken');
+    
+            const response = await fetch(`http://127.0.0.1:8000/tasks/${task.id}/`, {
+                method: 'PATCH',
+                headers: {
+                    'accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify(task),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Ошибка при обновлении задачи');
+            }
+    
+            const updatedTask = await response.json();
+            console.log('Обновленная задача:', updatedTask);
+    
+            // Обновляем локальное состояние задач
+            setTasks((prevTasks) => {
+                const updatedTasks = { ...prevTasks };
+                const statusKey = getStatusKey(updatedTask.status);
+    
+                // Удаляем задачу из всех статусов
+                for (const key in updatedTasks) {
+                    updatedTasks[key] = updatedTasks[key].filter((t) => t.id !== updatedTask.id);
+                }
+    
+                // Добавляем задачу в новый статус
+                updatedTasks[statusKey] = [...updatedTasks[statusKey], updatedTask];
+    
+                return updatedTasks;
+            });
+    
+            showNotification('Задача обновлена', 'success');
+        } catch (error) {
+            showNotification('Ошибка. Попробуй еще раз', 'error');
+        }
+        setTaskFormOpen(false);
+        setSelectedTask(null);
+    };
     // Функция для добавления комментария к задаче
     const handleAddComment = (taskId, comment, timestamp) => {
         setTasks((prevTasks) => {
@@ -329,7 +389,7 @@ const handleDeleteTask = async (taskId) => {
             {isTaskFormOpen && (
                 <TaskForm
                     task={selectedTask}
-                    onSave={handleSaveTask}
+                    onSave={selectedTask ? handleUpdateTask : handleSaveTask}  // Передаем handleUpdateTask для редактирования
                     onDelete={handleDeleteTask}
                     onClose={() => {
                         setTaskFormOpen(false);

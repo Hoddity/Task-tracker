@@ -7,7 +7,7 @@ const useTaskForm = (task) => {
         date_end: '',
         priority: 'Низкий',
         status: 'Нужно сделать',
-        command: '',
+        command: '',  // Теперь это строка, а не ID
         author: 'автор',
     });
 
@@ -16,10 +16,10 @@ const useTaskForm = (task) => {
             setFormData({
                 title: task.title || '',
                 description: task.description || '',
-                deadline: task.date_end || '',  // Убедитесь, что task.date_end передается
+                deadline: task.date_end || '',
                 priority: task.priority || 'Низкий',
                 status: task.status || 'Нужно сделать',
-                team: task.command || '',  // Убедитесь, что task.command передается
+                team: task.command || '',  // Теперь это строка, а не ID
                 author: task.author || 'автор',
             });
         }

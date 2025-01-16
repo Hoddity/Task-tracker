@@ -23,17 +23,21 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
         const taskData = {
             title: formData.title,
             description: formData.description,
-            date_end: formData.deadline,
-            command: formData.team ? parseInt(formData.team) : null,
+            date_end: formData.deadline || null,
+            command: formData.team || '',  // Убедитесь, что команда передается
             is_complete: formData.status === 'Сделано',
             status: formData.status,
             priority: formData.priority,
         };
     
+        if (task && mode === 'edit') {
+            taskData.id = task.id;  // Добавляем ID задачи для обновления
+        }
+    
         console.log('Отправляемые данные:', taskData);
     
         try {
-            onSave(taskData); // Передаем данные задачи в TaskBoard
+            onSave(taskData);  // Передаем данные задачи в TaskBoard
             setIsSaved(true);
             setTimeout(() => setIsSaved(false), 3000);
             onClose();
@@ -41,7 +45,6 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
             console.error('Ошибка:', error);
         }
     };
-
     // Функция для подтверждения удаления задачи
     const confirmDelete = () => {
         if (onDelete && task?.id) onDelete(task.id);
@@ -159,7 +162,7 @@ const TaskForm = ({ task, onClose, onSave, onDelete, mode = 'view', onEdit, onCh
                             onChange={handleInputChange}
                         />
                     )}
-
+                    
                     {isViewMode ? null : task ? (
                         <div className="button-group">
                             <button
